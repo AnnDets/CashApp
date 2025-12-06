@@ -5,7 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +27,19 @@ public class Category {
     @Column(nullable = false)
     private UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "author_id")
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
-    @OneToOne
-    @JoinColumn(name = "icon_id")
+    @ManyToOne
+    @JoinColumn(name = "icon_id", nullable = false)
     private Icon icon;
 
-    private Boolean income;
-    private Boolean outcome;
+    @Column(nullable = false)
+    private Boolean forIncome;
+    @Column(nullable = false)
+    private Boolean forOutcome;
 
+    @Column(nullable = false)
     private Boolean mandatoryOutcome;
 }

@@ -1,11 +1,10 @@
 package edu.bsu.cashstorage.entity;
 
-import edu.bsu.cashstorage.entity.config.Place;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,25 +29,28 @@ public class Operation {
     @Column(nullable = false)
     private UUID id;
 
+    // for future integration
+    @Column(nullable = false)
     private String externalSystemOperationId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "account_outcome_id")
     private Account accountOutcome;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "account_income_id")
     private Account accountIncome;
 
+    @Column(nullable = false)
     private ZonedDateTime operationDate;
 
     private String description;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "place_id")
     private Place place;
 
@@ -56,8 +58,12 @@ public class Operation {
 
     private BigDecimal outcome;
 
+    @Column(nullable = false)
     private Boolean deleted;
+    @Column(nullable = false)
     private Boolean isProcessed;
+    @Column(nullable = false)
     private Instant created;
+    @Column(nullable = false)
     private Instant updated;
 }

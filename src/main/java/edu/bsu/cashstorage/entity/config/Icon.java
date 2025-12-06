@@ -27,5 +27,6 @@ public class Icon {
     @Column(nullable = false)
     private UUID id;
 
+    @Column(nullable = false, length = 5000)
     private String data;
 }

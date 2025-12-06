@@ -1,13 +1,12 @@
-package edu.bsu.cashstorage.entity.config;
+package edu.bsu.cashstorage.entity;
 
-import edu.bsu.cashstorage.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +29,10 @@ public class Place {
     @Column(nullable = false)
     private UUID id;
 
+    @Column(nullable = false)
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "author_id")
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 }

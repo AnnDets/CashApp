@@ -27,11 +27,14 @@ public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
+    @Column(nullable = false, length = 30)
     private String country;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String displayName;
+
+    @Column(nullable = false, length = 10000)
+    private String icon;
 
     @Override
     public final boolean equals(Object o) {

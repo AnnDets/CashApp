@@ -24,10 +24,11 @@ import java.util.UUID;
 public class Color {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private UUID id;
-
-    private Integer red;
-    private Integer green;
-    private Integer blue;
+    @Column(nullable = false)
+    private Short red;
+    @Column(nullable = false)
+    private Short green;
+    @Column(nullable = false)
+    private Short blue;
 }
