@@ -23,7 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(APIs.API_V1_OPERATIONS)
 public class OperationController {
-    @PostMapping
+    @PostMapping(APIs.Paths.FILTER_PATH)
     public List<ListOperationDTO> filterOperations(@RequestParam(APIs.Params.USER_ID) UUID userId,
                                                    @RequestBody OperationFilterDTO filter) {
         return null;

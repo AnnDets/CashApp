@@ -32,6 +32,7 @@ public class APIs {
         public static final String V1 = "v1";
         public static final String API = "api";
         public static final String ID = "id";
+        public static final String FILTER = "filter";
         public static final String ID_VARIABLE = "{" + ID + "}";
         private static final String SLASH = "/";
     }
@@ -39,5 +40,6 @@ public class APIs {
     public static final class Paths {
         public static final String ID_PATH = Params.SLASH + Params.ID_VARIABLE;
         public static final String SEARCH_PATH = Params.SLASH + Params.SEARCH;
+        public static final String FILTER_PATH = Params.SLASH + Params.FILTER;
     }
 }
