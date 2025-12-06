@@ -8,6 +8,7 @@ class CashStorageApplicationTests {
 
     @Test
     void contextLoads() {
+        return null;
     }
 
 }

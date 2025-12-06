@@ -1,6 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE accounts
 (
-    id                       UUID         NOT NULL,
+    id           UUID NOT NULL DEFAULT uuid_generate_v4(),
     user_id                  UUID         NOT NULL,
     name                     VARCHAR(255) NOT NULL,
     type                     SMALLINT     NOT NULL,
@@ -10,10 +12,10 @@ CREATE TABLE accounts
     include_in_total_balance BOOLEAN      NOT NULL,
     default_account          BOOLEAN      NOT NULL,
     bank_id                  UUID,
-    card_number1             VARCHAR(4),
-    card_number2             VARCHAR(4),
-    card_number3             VARCHAR(4),
-    card_number4             VARCHAR(4),
+    card_number1 VARCHAR(100),
+    card_number2 VARCHAR(100),
+    card_number3 VARCHAR(100),
+    card_number4 VARCHAR(100),
     savings_account          BOOLEAN      NOT NULL,
     archive_account          BOOLEAN      NOT NULL,
     CONSTRAINT pk_accounts PRIMARY KEY (id)
@@ -21,7 +23,7 @@ CREATE TABLE accounts
 
 CREATE TABLE banks
 (
-    id           UUID           NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     country      VARCHAR(30)    NOT NULL,
     display_name VARCHAR(30)    NOT NULL,
     icon         VARCHAR(10000) NOT NULL,
@@ -30,7 +32,7 @@ CREATE TABLE banks
 
 CREATE TABLE categories
 (
-    id                UUID    NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     author_id         UUID    NOT NULL,
     icon_id           UUID    NOT NULL,
     for_income        BOOLEAN NOT NULL,
@@ -41,7 +43,7 @@ CREATE TABLE categories
 
 CREATE TABLE colors
 (
-    id    UUID     NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     red   SMALLINT NOT NULL,
     green SMALLINT NOT NULL,
     blue  SMALLINT NOT NULL,
@@ -58,14 +60,14 @@ CREATE TABLE currencies
 
 CREATE TABLE icons
 (
-    id   UUID          NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     data VARCHAR(5000) NOT NULL,
     CONSTRAINT pk_icons PRIMARY KEY (id)
 );
 
 CREATE TABLE operations
 (
-    id                           UUID                        NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     external_system_operation_id VARCHAR(255)                NOT NULL,
     category_id                  UUID,
     account_outcome_id           UUID,
@@ -84,7 +86,7 @@ CREATE TABLE operations
 
 CREATE TABLE places
 (
-    id          UUID         NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     description VARCHAR(255) NOT NULL,
     author_id   UUID         NOT NULL,
     CONSTRAINT pk_places PRIMARY KEY (id)
@@ -92,12 +94,18 @@ CREATE TABLE places
 
 CREATE TABLE users
 (
-    id       UUID         NOT NULL,
+    id UUID NOT NULL DEFAULT uuid_generate_v4(),
     email    VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
+
+ALTER TABLE users
+    ADD CONSTRAINT uc_users_email UNIQUE (email);
+
+ALTER TABLE users
+    ADD CONSTRAINT uc_users_username UNIQUE (username);
 
 ALTER TABLE accounts
     ADD CONSTRAINT FK_ACCOUNTS_ON_BANK FOREIGN KEY (bank_id) REFERENCES banks (id);

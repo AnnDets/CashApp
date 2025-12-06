@@ -27,6 +27,8 @@ public class Category {
     @Column(nullable = false)
     private UUID id;
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
