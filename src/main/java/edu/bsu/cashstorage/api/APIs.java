@@ -6,23 +6,37 @@ import lombok.experimental.UtilityClass;
 public class APIs {
 
     public static final String API_V1 = Params.API + Params.SLASH + Params.V1;
-    // Config URLs
-    public static final String API_V1_CURRENCIES = API_V1 + Params.SLASH + Params.CONFIGURATION + "/currencies";
-    public static final String API_V1_BANKS = API_V1 + Params.SLASH + Params.CONFIGURATION + "/banks";
-    public static final String API_V1_COLORS = API_V1 + Params.SLASH + Params.CONFIGURATION + "/colors";
-    public static final String API_V1_ICONS = API_V1 + Params.SLASH + Params.CONFIGURATION + "/icons";
-    // Entity URLs
-    public static final String API_V1_AUTH = API_V1 + "/auth";
-    public static final String API_V1_USERS = API_V1 + "/users";
-    public static final String API_V1_ACCOUNTS = API_V1 + "/accounts";
-    public static final String API_V1_OPERATIONS = API_V1 + "/operations";
-    public static final String API_V1_CATEGORIES = API_V1 + "/categories";
-    public static final String API_V1_PLACES = API_V1 + "/places";
-    // Auth endpoints
-    public static final String AUTH_LOGIN = "/login";
-    public static final String AUTH_REGISTER = "/register";
-    // User endpoints
-    public static final String USERS_PROFILE = "/profile";
+
+    public static final class Server {
+        // Config URLs
+        public static final String API_V1_CURRENCIES = API_V1 + Params.SLASH + Params.CONFIGURATION + "/currencies";
+        public static final String API_V1_BANKS = API_V1 + Params.SLASH + Params.CONFIGURATION + "/banks";
+        public static final String API_V1_COLORS = API_V1 + Params.SLASH + Params.CONFIGURATION + "/colors";
+        public static final String API_V1_ICONS = API_V1 + Params.SLASH + Params.CONFIGURATION + "/icons";
+        // Entity URLs
+        public static final String API_V1_AUTH = API_V1 + Params.SLASH + Params.AUTH;
+        public static final String API_V1_USERS = API_V1 + "/users";
+        public static final String API_V1_ACCOUNTS = API_V1 + Params.SLASH + Params.ACCOUNTS;
+        public static final String API_V1_OPERATIONS = API_V1 + "/operations";
+        public static final String API_V1_CATEGORIES = API_V1 + "/categories";
+        public static final String API_V1_PLACES = API_V1 + "/places";
+        // Auth endpoints
+        public static final String AUTH_LOGIN = "/login";
+        public static final String AUTH_REGISTER = "/register";
+        // User endpoints
+        public static final String USERS_PROFILE = "/profile";
+
+        // Paths
+        public static final String ID_PATH = Params.SLASH + Params.ID_VARIABLE;
+        public static final String SEARCH_PATH = Params.SLASH + Params.SEARCH;
+        public static final String FILTER_PATH = Params.SLASH + Params.FILTER;
+    }
+
+    public static final class Client {
+        // Paths
+        public static final String AUTH_PATH = Params.SLASH + Params.AUTH;
+        public static final String ACCOUNTS_PATH = Params.SLASH + Params.ACCOUNTS;
+    }
 
     // Parameter constants
     public static final class Params {
@@ -34,12 +48,10 @@ public class APIs {
         public static final String ID = "id";
         public static final String FILTER = "filter";
         public static final String ID_VARIABLE = "{" + ID + "}";
-        private static final String SLASH = "/";
-    }
 
-    public static final class Paths {
-        public static final String ID_PATH = Params.SLASH + Params.ID_VARIABLE;
-        public static final String SEARCH_PATH = Params.SLASH + Params.SEARCH;
-        public static final String FILTER_PATH = Params.SLASH + Params.FILTER;
+        public static final String AUTH = "auth";
+        public static final String ACCOUNTS = "accounts";
+
+        private static final String SLASH = "/";
     }
 }

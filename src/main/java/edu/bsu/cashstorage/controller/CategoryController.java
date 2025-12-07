@@ -21,19 +21,19 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(APIs.API_V1_CATEGORIES)
+@RequestMapping(APIs.Server.API_V1_CATEGORIES)
 public class CategoryController {
     @GetMapping
     public List<ListCategoryDTO> getAllCategories(@RequestParam(APIs.Params.USER_ID) UUID userId) {
         return null;
     }
 
-    @GetMapping(APIs.Paths.ID_PATH)
+    @GetMapping(APIs.Server.ID_PATH)
     public CategoryDTO getCategory(@PathVariable(APIs.Params.ID) UUID categoryId) {
         return null;
     }
 
-    @DeleteMapping(APIs.Paths.ID_PATH)
+    @DeleteMapping(APIs.Server.ID_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable(APIs.Params.ID) UUID categoryId) {
     }
@@ -45,7 +45,7 @@ public class CategoryController {
         return null;
     }
 
-    @PatchMapping(APIs.Paths.ID_PATH)
+    @PatchMapping(APIs.Server.ID_PATH)
     public CategoryDTO patchCategory(@PathVariable(APIs.Params.ID) UUID categoryId,
                                      @RequestParam(APIs.Params.USER_ID) UUID userId,
                                      @RequestBody CategoryInputDTO categoryDTO

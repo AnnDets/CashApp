@@ -30,6 +30,11 @@ spring:
     table: flyway_schema_history
     default-schema: public
 
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
+
 springdoc:
   api-docs:
     path: /api-docs

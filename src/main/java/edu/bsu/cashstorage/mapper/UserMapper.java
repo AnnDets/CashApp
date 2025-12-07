@@ -3,6 +3,7 @@ package edu.bsu.cashstorage.mapper;
 import edu.bsu.cashstorage.dto.user.UserDTO;
 import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.security.dto.AuthRequestDTO;
+import edu.bsu.cashstorage.security.dto.RegisterRequestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -21,4 +22,7 @@ public interface UserMapper {
             @Mapping(target = "username", ignore = true)
     })
     User toEntity(AuthRequestDTO authRequestDTO);
+
+    @Mapping(target = "id", ignore = true)
+    User toEntity(RegisterRequestDTO registerRequestDTO);
 }

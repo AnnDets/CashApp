@@ -2,6 +2,9 @@ package edu.bsu.cashstorage.controller.config;
 
 import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.dto.config.bank.BankDTO;
+import edu.bsu.cashstorage.mapper.config.BankMapper;
+import edu.bsu.cashstorage.service.config.BankService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,15 +14,19 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(APIs.API_V1_BANKS)
+@RequiredArgsConstructor
+@RequestMapping(APIs.Server.API_V1_BANKS)
 public class BankController {
+    private final BankService bankService;
+    private final BankMapper bankMapper;
+
     @GetMapping
     public List<BankDTO> getAllBanks() {
-        return null;
+        return bankMapper.toDTO(bankService.getAllBanks());
     }
 
-    @GetMapping(APIs.Paths.SEARCH_PATH)
+    @GetMapping(APIs.Server.SEARCH_PATH)
     public List<BankDTO> searchBanks(@RequestParam String search) {
-        return null;
+        return bankMapper.toDTO(bankService.searchBanks(search));
     }
 }

@@ -56,7 +56,7 @@ CREATE TABLE currencies
 (
     id           VARCHAR(3)  NOT NULL,
     display_name VARCHAR(30) NOT NULL,
-    symbol       VARCHAR(1),
+    symbol VARCHAR(2),
     CONSTRAINT pk_currencies PRIMARY KEY (id)
 );
 
@@ -97,9 +97,9 @@ CREATE TABLE places
 
 CREATE TABLE users
 (
-    id UUID NOT NULL DEFAULT uuid_generate_v4(),
-    email    VARCHAR(255) NOT NULL,
-    username VARCHAR(255) NOT NULL,
+    id       UUID         NOT NULL DEFAULT uuid_generate_v4(),
+    email    VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );

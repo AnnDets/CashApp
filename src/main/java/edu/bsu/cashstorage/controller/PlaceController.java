@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(APIs.API_V1_PLACES)
+@RequestMapping(APIs.Server.API_V1_PLACES)
 public class PlaceController {
     @GetMapping
     public List<SimplePlaceDTO> getPlaces() {
@@ -32,19 +32,19 @@ public class PlaceController {
         return null;
     }
 
-    @PatchMapping(APIs.Paths.ID_PATH)
+    @PatchMapping(APIs.Server.ID_PATH)
     public SimplePlaceDTO patchPlace(@PathVariable(APIs.Params.ID) UUID placeId,
                                      @RequestParam(APIs.Params.USER_ID) UUID userId,
                                      @RequestBody SimplePlaceDTO simplePlaceDTO) {
         return null;
     }
 
-    @DeleteMapping(APIs.Paths.ID_PATH)
+    @DeleteMapping(APIs.Server.ID_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removePlace(@PathVariable(APIs.Params.ID) UUID placeId) {
     }
 
-    @GetMapping(APIs.Paths.SEARCH_PATH)
+    @GetMapping(APIs.Server.SEARCH_PATH)
     public List<SimplePlaceDTO> getPlaces(@RequestParam String search) {
         return null;
     }

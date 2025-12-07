@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(APIs.API_V1_OPERATIONS)
+@RequestMapping(APIs.Server.API_V1_OPERATIONS)
 public class OperationController {
-    @PostMapping(APIs.Paths.FILTER_PATH)
+    @PostMapping(APIs.Server.FILTER_PATH)
     public List<ListOperationDTO> filterOperations(@RequestParam(APIs.Params.USER_ID) UUID userId,
                                                    @RequestBody OperationFilterDTO filter) {
         return null;
@@ -41,13 +41,13 @@ public class OperationController {
         return null;
     }
 
-    @DeleteMapping(APIs.Paths.ID_PATH)
+    @DeleteMapping(APIs.Server.ID_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOperation(@RequestParam(APIs.Params.USER_ID) UUID userId,
                                 @PathVariable(APIs.Params.ID) UUID operationId) {
     }
 
-    @PatchMapping(APIs.Paths.ID_PATH)
+    @PatchMapping(APIs.Server.ID_PATH)
     public SimpleOperationDTO updateOperation(@PathVariable(APIs.Params.ID) UUID operationId,
                                               @RequestParam(APIs.Params.USER_ID) UUID userId,
                                               @RequestBody InputOperationDTO inputOperationDTO) {

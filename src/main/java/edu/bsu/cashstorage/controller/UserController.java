@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(APIs.API_V1_USERS)
+@RequestMapping(APIs.Server.API_V1_USERS)
 public class UserController {
-    @GetMapping(APIs.USERS_PROFILE)
+    @GetMapping(APIs.Server.USERS_PROFILE)
     public UserDTO getDetails(@RequestParam("userId") UUID userId) {
         return null;
     }
 
-    @PatchMapping(APIs.USERS_PROFILE)
+    @PatchMapping(APIs.Server.USERS_PROFILE)
     public UserDTO updateProfile(@RequestParam("userId") UUID userId, @RequestBody PatchUserDTO patchUserDTO) {
         return null;
     }
 
-    @DeleteMapping(APIs.USERS_PROFILE)
+    @DeleteMapping(APIs.Server.USERS_PROFILE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAccount(@RequestParam("userId") UUID userId) {
     }
