@@ -4,6 +4,7 @@ import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.dto.category.CategoryDTO;
 import edu.bsu.cashstorage.dto.category.CategoryInputDTO;
 import edu.bsu.cashstorage.dto.category.ListCategoryDTO;
+import edu.bsu.cashstorage.dto.category.SimpleCategoryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +40,8 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDTO createCategory(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                      @RequestBody CategoryInputDTO categoryDTO) {
+    public SimpleCategoryDTO createCategory(@RequestParam(APIs.Params.USER_ID) UUID userId,
+                                            @RequestBody CategoryInputDTO categoryDTO) {
         return null;
     }
 

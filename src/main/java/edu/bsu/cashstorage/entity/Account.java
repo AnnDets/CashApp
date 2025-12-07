@@ -66,13 +66,13 @@ public class Account {
     @JoinColumn(name = "bank_id")
     private Bank bank;
 
-    @Column(length = 4)
+    @Column(length = 100)
     private String cardNumber1;
-    @Column(length = 4)
+    @Column(length = 100)
     private String cardNumber2;
-    @Column(length = 4)
+    @Column(length = 100)
     private String cardNumber3;
-    @Column(length = 4)
+    @Column(length = 100)
     private String cardNumber4;
 
     @Column(nullable = false)

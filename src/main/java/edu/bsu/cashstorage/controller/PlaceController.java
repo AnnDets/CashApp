@@ -1,7 +1,6 @@
 package edu.bsu.cashstorage.controller;
 
 import edu.bsu.cashstorage.api.APIs;
-import edu.bsu.cashstorage.dto.place.PlaceDTO;
 import edu.bsu.cashstorage.dto.place.SimplePlaceDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,21 +21,21 @@ import java.util.UUID;
 @RequestMapping(APIs.API_V1_PLACES)
 public class PlaceController {
     @GetMapping
-    public List<PlaceDTO> getPlaces() {
+    public List<SimplePlaceDTO> getPlaces() {
         return null;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PlaceDTO createPlace(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                @RequestBody SimplePlaceDTO simplePlaceDTO) {
+    public SimplePlaceDTO createPlace(@RequestParam(APIs.Params.USER_ID) UUID userId,
+                                      @RequestBody SimplePlaceDTO simplePlaceDTO) {
         return null;
     }
 
     @PatchMapping(APIs.Paths.ID_PATH)
-    public PlaceDTO patchPlace(@PathVariable(APIs.Params.ID) UUID placeId,
-                               @RequestParam(APIs.Params.USER_ID) UUID userId,
-                               @RequestBody SimplePlaceDTO simplePlaceDTO) {
+    public SimplePlaceDTO patchPlace(@PathVariable(APIs.Params.ID) UUID placeId,
+                                     @RequestParam(APIs.Params.USER_ID) UUID userId,
+                                     @RequestBody SimplePlaceDTO simplePlaceDTO) {
         return null;
     }
 
@@ -46,7 +45,7 @@ public class PlaceController {
     }
 
     @GetMapping(APIs.Paths.SEARCH_PATH)
-    public List<PlaceDTO> getPlaces(@RequestParam String search) {
+    public List<SimplePlaceDTO> getPlaces(@RequestParam String search) {
         return null;
     }
 }

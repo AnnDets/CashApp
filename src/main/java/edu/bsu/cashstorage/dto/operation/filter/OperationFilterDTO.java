@@ -1,5 +1,6 @@
 package edu.bsu.cashstorage.dto.operation.filter;
 
+import edu.bsu.cashstorage.entity.enums.OperationType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -13,5 +14,6 @@ public class OperationFilterDTO {
     private List<UUID> accountIds;
     private CategoryFilter categoryFilter;
     private Boolean notProcessed;
+    private List<OperationType> operationTypes;
 }
 

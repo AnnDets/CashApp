@@ -1,5 +1,6 @@
 package edu.bsu.cashstorage.dto.category;
 
+import edu.bsu.cashstorage.dto.config.ColorDTO;
 import edu.bsu.cashstorage.dto.config.IconDTO;
 import edu.bsu.cashstorage.dto.user.UserDTO;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class CategoryDTO {
     private Boolean forOutcome;
     private Boolean mandatoryOutcome;
     private IconDTO icon;
+    private ColorDTO color;
 }

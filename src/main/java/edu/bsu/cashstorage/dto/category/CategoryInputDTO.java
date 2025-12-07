@@ -10,6 +10,7 @@ import java.util.UUID;
 public class CategoryInputDTO {
     private Boolean forIncome;
     private Boolean forOutcome;
+    private String name;
     private Boolean mandatoryOutcome;
     private UUID iconId;
     private UUID colorId;

@@ -1,7 +1,7 @@
 package edu.bsu.cashstorage.controller;
 
 import edu.bsu.cashstorage.api.APIs;
-import edu.bsu.cashstorage.dto.operation.CreateOperationDTO;
+import edu.bsu.cashstorage.dto.operation.InputOperationDTO;
 import edu.bsu.cashstorage.dto.operation.ListOperationDTO;
 import edu.bsu.cashstorage.dto.operation.SimpleOperationDTO;
 import edu.bsu.cashstorage.dto.operation.filter.OperationFilterDTO;
@@ -37,7 +37,7 @@ public class OperationController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SimpleOperationDTO createOperation(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                              @RequestBody CreateOperationDTO createOperationDTO) {
+                                              @RequestBody InputOperationDTO inputOperationDTO) {
         return null;
     }
 
@@ -50,7 +50,7 @@ public class OperationController {
     @PatchMapping(APIs.Paths.ID_PATH)
     public SimpleOperationDTO updateOperation(@PathVariable(APIs.Params.ID) UUID operationId,
                                               @RequestParam(APIs.Params.USER_ID) UUID userId,
-                                              @RequestBody CreateOperationDTO createOperationDTO) {
+                                              @RequestBody InputOperationDTO inputOperationDTO) {
         return null;
     }
 }

@@ -1,5 +1,6 @@
 package edu.bsu.cashstorage.entity;
 
+import edu.bsu.cashstorage.entity.config.Color;
 import edu.bsu.cashstorage.entity.config.Icon;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,10 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "icon_id", nullable = false)
     private Icon icon;
+
+    @ManyToOne
+    @JoinColumn(name = "color_id", nullable = false)
+    private Color color;
 
     @Column(nullable = false)
     private Boolean forIncome;

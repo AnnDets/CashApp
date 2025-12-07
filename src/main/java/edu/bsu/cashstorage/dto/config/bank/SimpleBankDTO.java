@@ -9,5 +9,5 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class SimpleBankDTO {
     private UUID id;
-    private String name;
+    private String displayName;
 }

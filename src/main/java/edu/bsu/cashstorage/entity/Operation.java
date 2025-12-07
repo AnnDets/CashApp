@@ -1,7 +1,10 @@
 package edu.bsu.cashstorage.entity;
 
+import edu.bsu.cashstorage.entity.enums.OperationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -32,6 +35,10 @@ public class Operation {
     // for future integration
     @Column(nullable = false)
     private String externalSystemOperationId;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
+    private OperationType operationType;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

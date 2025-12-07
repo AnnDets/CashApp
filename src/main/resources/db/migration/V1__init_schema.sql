@@ -32,12 +32,14 @@ CREATE TABLE banks
 
 CREATE TABLE categories
 (
-    id UUID NOT NULL DEFAULT uuid_generate_v4(),
-    author_id         UUID    NOT NULL,
-    icon_id           UUID    NOT NULL,
-    for_income        BOOLEAN NOT NULL,
-    for_outcome       BOOLEAN NOT NULL,
-    mandatory_outcome BOOLEAN NOT NULL,
+    id                UUID        NOT NULL DEFAULT uuid_generate_v4(),
+    name              VARCHAR(30) NOT NULL,
+    author_id         UUID        NOT NULL,
+    icon_id           UUID        NOT NULL,
+    color_id          UUID        NOT NULL,
+    for_income        BOOLEAN     NOT NULL,
+    for_outcome       BOOLEAN     NOT NULL,
+    mandatory_outcome BOOLEAN     NOT NULL,
     CONSTRAINT pk_categories PRIMARY KEY (id)
 );
 
@@ -67,11 +69,12 @@ CREATE TABLE icons
 
 CREATE TABLE operations
 (
-    id UUID NOT NULL DEFAULT uuid_generate_v4(),
+    id             UUID     NOT NULL DEFAULT uuid_generate_v4(),
     external_system_operation_id VARCHAR(255)                NOT NULL,
     category_id                  UUID,
     account_outcome_id           UUID,
     account_income_id            UUID,
+    operation_type SMALLINT NOT NULL,
     operation_date               TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     description                  VARCHAR(255),
     place_id                     UUID,
@@ -121,6 +124,9 @@ ALTER TABLE categories
 
 ALTER TABLE categories
     ADD CONSTRAINT FK_CATEGORIES_ON_ICON FOREIGN KEY (icon_id) REFERENCES icons (id);
+
+ALTER TABLE categories
+    ADD CONSTRAINT FK_CATEGORIES_ON_COLOR FOREIGN KEY (color_id) REFERENCES colors (id);
 
 ALTER TABLE operations
     ADD CONSTRAINT FK_OPERATIONS_ON_ACCOUNT_INCOME FOREIGN KEY (account_income_id) REFERENCES accounts (id);

@@ -2,8 +2,6 @@ package edu.bsu.cashstorage.entity.enums;
 
 import lombok.Getter;
 
-import lombok.Getter;
-
 @Getter
 public enum AccountType {
     CASH(0, "Cash"),
