@@ -1,114 +1,137 @@
+// auth.js — сохраняет user_id и редиректит на /accounts (без ?userId)
+console.log('auth.js loaded');
+
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://localhost:8080/api/v1/auth';
+    const API_BASE = '/api/v1/auth';
 
+    function el(id) {
+        return document.getElementById(id);
+    }
     function showAlert(containerId, message, type = 'danger') {
-        const container = document.getElementById(containerId);
-        container.innerHTML = `<div class="alert alert-${type} alert-sm" role="alert">${message}</div>`;
+        const c = el(containerId);
+        if (c) c.innerHTML = `<div class="alert alert-${type}" role="alert">${message}</div>`;
     }
-
     function clearAlert(containerId) {
-        document.getElementById(containerId).innerHTML = '';
+        const c = el(containerId);
+        if (c) c.innerHTML = '';
     }
 
-    function setLoading(button, spinner, isLoading) {
-        button.disabled = isLoading;
-        spinner.classList.toggle('d-none', !isLoading);
+    function setLoading(btn, spinner, loading) {
+        if (btn) btn.disabled = loading;
+        if (spinner) spinner.classList.toggle('d-none', !loading);
     }
-
     function saveAuth(token, userId) {
         if (token) localStorage.setItem('auth_token', token);
         if (userId) localStorage.setItem('user_id', userId);
     }
 
-    // Registration
-    document.getElementById('registerForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const form = e.target;
-        if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            return;
-        }
-
-        clearAlert('registerAlert');
-        const btn = document.getElementById('registerBtn');
-        const spinner = document.getElementById('registerSpinner');
-        setLoading(btn, spinner, true);
-
-        const payload = {
-            username: document.getElementById('regUsername').value.trim(),
-            email: document.getElementById('regEmail').value.trim(),
-            password: document.getElementById('regPassword').value
-        };
-
+    async function safeJson(res) {
         try {
-            const res = await fetch(`${API_BASE}/register`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
+            return await res.json();
+        } catch (e) {
+            return null;
+        }
+    }
 
-            const data = await res.json().catch(() => ({}));
-
-            if (res.ok) {
-                showAlert('registerAlert', 'Регистрация успешна. Теперь можно войти.', 'success');
-                const loginTab = new bootstrap.Tab(document.querySelector('#login-tab'));
-                loginTab.show();
-            } else {
-                const msg = data.message || JSON.stringify(data) || 'Ошибка регистрации';
-                showAlert('registerAlert', msg, 'danger');
+    const registerForm = el('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!registerForm.checkValidity()) {
+                registerForm.classList.add('was-validated');
+                return;
             }
-        } catch (err) {
-            showAlert('registerAlert', 'Сетевая ошибка. Проверьте API и CORS.', 'danger');
-        } finally {
-            setLoading(btn, spinner, false);
-        }
-    });
+            clearAlert('registerAlert');
+            const btn = el('registerBtn');
+            const spinner = el('registerSpinner');
+            setLoading(btn, spinner, true);
 
-    // Login
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const form = e.target;
-        if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            return;
-        }
+            const payload = {
+                username: el('regUsername').value.trim(),
+                email: el('regEmail').value.trim(),
+                password: el('regPassword').value
+            };
 
-        clearAlert('loginAlert');
-        const btn = document.getElementById('loginBtn');
-        const spinner = document.getElementById('loginSpinner');
-        setLoading(btn, spinner, true);
+            try {
+                const res = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
 
-        const payload = {
-            email: document.getElementById('loginEmail').value.trim(),
-            password: document.getElementById('loginPassword').value
-        };
+                const data = await safeJson(res);
+                console.log('register response', res.status, data);
 
-        try {
-            const res = await fetch(`${API_BASE}/login`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(payload)
-            });
-
-            const data = await res.json().catch(() => ({}));
-
-            if (res.ok) {
-                const userId = data.id;
-                const token = data.token || data.accessToken || data.access_token || null;
-                if (!userId) {
-                    showAlert('loginAlert', 'В ответе сервера не найден user id.', 'warning');
+                if (res.ok) {
+                    const userId = data?.id || null;
+                    const token = data?.token || data?.accessToken || data?.access_token || null;
+                    if (!userId) {
+                        showAlert('registerAlert', 'Регистрация успешна, но user id не получен.', 'warning');
+                        saveAuth(token, null);
+                    } else {
+                        saveAuth(token, userId);
+                        window.location.href = '/accounts';
+                    }
                 } else {
-                    saveAuth(token, userId);
-                    window.location.href = `accounts.html?userId=${encodeURIComponent(userId)}`;
+                    const msg = data?.message || data?.error || `Ошибка регистрации ${res.status}`;
+                    showAlert('registerAlert', msg, 'danger');
                 }
-            } else {
-                const msg = data.message || JSON.stringify(data) || 'Ошибка входа';
-                showAlert('loginAlert', msg, 'danger');
+            } catch (err) {
+                console.error('register error', err);
+                showAlert('registerAlert', 'Сетевая ошибка. Проверьте API и CORS.', 'danger');
+            } finally {
+                setLoading(btn, spinner, false);
             }
-        } catch (err) {
-            showAlert('loginAlert', 'Сетевая ошибка. Проверьте API и CORS.', 'danger');
-        } finally {
-            setLoading(btn, spinner, false);
-        }
-    });
+        });
+    }
+
+    const loginForm = el('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loginForm.checkValidity()) {
+                loginForm.classList.add('was-validated');
+                return;
+            }
+            clearAlert('loginAlert');
+            const btn = el('loginBtn');
+            const spinner = el('loginSpinner');
+            setLoading(btn, spinner, true);
+
+            const payload = {
+                email: el('loginEmail').value.trim(),
+                password: el('loginPassword').value
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await safeJson(res);
+                console.log('login response', res.status, data);
+
+                if (res.ok) {
+                    const userId = data?.id || data?.user?.id || null;
+                    const token = data?.token || data?.accessToken || data?.access_token || null;
+                    if (!userId) {
+                        showAlert('loginAlert', 'В ответе сервера не найден user id.', 'warning');
+                    } else {
+                        saveAuth(token, userId);
+                        window.location.href = '/accounts';
+                    }
+                } else {
+                    const msg = data?.message || data?.error || `Ошибка входа ${res.status}`;
+                    showAlert('loginAlert', msg, 'danger');
+                }
+            } catch (err) {
+                console.error('login error', err);
+                showAlert('loginAlert', 'Сетевая ошибка. Проверьте API и CORS.', 'danger');
+            } finally {
+                setLoading(btn, spinner, false);
+            }
+        });
+    }
 });

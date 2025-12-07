@@ -3,38 +3,47 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <title>Accounts — Финансы</title>
+    <title>Счета — Финансы</title>
 
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="accounts/accounts.css" rel="stylesheet">
+
+    <!-- App CSS (static path) -->
+    <link href="/accounts/accounts.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="#">Финансы</a>
-        <div>
-            <button class="btn btn-primary btn-sm me-2" id="createAccountBtn">Создать счёт</button>
-            <button class="btn btn-outline-primary btn-sm me-2" id="refreshBtn">Обновить</button>
+        <a class="navbar-brand" href="/">Финансы</a>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-primary btn-sm" id="createAccountBtn">Создать счёт</button>
+            <button class="btn btn-outline-primary btn-sm" id="refreshBtn">Обновить</button>
             <button class="btn btn-outline-danger btn-sm" id="logoutBtn">Выйти</button>
         </div>
     </div>
 </nav>
 
 <main class="container my-4">
-    <div class="d-flex align-items-center mb-3">
-        <h3 class="me-auto">Счета</h3>
-        <div class="form-check form-switch me-3">
-            <input class="form-check-input" id="showArchived" type="checkbox">
-            <label class="form-check-label" for="showArchived">Показывать архивные</label>
+    <div class="d-flex align-items-center mb-3 gap-3 flex-wrap">
+        <h3 class="mb-0">Счета</h3>
+
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <div class="form-check form-switch d-flex align-items-center">
+                <input class="form-check-input" id="showArchived" type="checkbox">
+                <label class="form-check-label ms-2" for="showArchived">Показывать архивные</label>
+            </div>
+
+            <div>
+                <select class="form-select form-select-sm" id="typeFilter">
+                    <option value="">Все типы</option>
+                    <option value="CASH">CASH</option>
+                    <option value="CARD">CARD</option>
+                    <option value="BANK_ACCOUNT">BANK_ACCOUNT</option>
+                    <option value="CREDIT">CREDIT</option>
+                    <option value="DEPOSIT">DEPOSIT</option>
+                </select>
+            </div>
         </div>
-        <select class="form-select form-select-sm w-auto" id="typeFilter">
-            <option value="">Все типы</option>
-            <option value="CASH">CASH</option>
-            <option value="CARD">CARD</option>
-            <option value="BANK_ACCOUNT">BANK_ACCOUNT</option>
-            <option value="CREDIT">CREDIT</option>
-            <option value="DEPOSIT">DEPOSIT</option>
-        </select>
     </div>
 
     <div id="alertContainer"></div>
@@ -44,13 +53,15 @@
         <div class="mt-2 text-muted">Загрузка счетов...</div>
     </div>
 
-    <div class="row g-3" id="accountsList"></div>
+    <!-- Список карточек: CSS Grid управляет раскладкой -->
+    <div aria-live="polite" class="accounts-grid" id="accountsList"></div>
 
     <div class="text-center text-muted py-4 d-none" id="emptyState">
         Счета не найдены.
     </div>
 </main>
 
+<!-- Modal: Create / Edit Account -->
 <div aria-hidden="true" class="modal fade" id="accountModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <form class="modal-content needs-validation" id="accountForm" novalidate>
@@ -58,6 +69,7 @@
                 <h5 class="modal-title" id="accountModalTitle">Создать счёт</h5>
                 <button aria-label="Закрыть" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
+
             <div class="modal-body">
                 <div id="accountFormAlert"></div>
 
@@ -105,17 +117,17 @@
                         <input class="form-control" id="acc_currentBalance"/>
                     </div>
 
-                    <div class="col-6 col-md-3">
-                        <div class="form-check mt-3">
+                    <div class="col-6 col-md-3 d-flex align-items-center">
+                        <div class="form-check">
                             <input class="form-check-input" id="acc_includeInTotalBalance" type="checkbox"/>
-                            <label class="form-check-label">Включать в общий баланс</label>
+                            <label class="form-check-label ms-2">Включать в общий баланс</label>
                         </div>
                     </div>
 
-                    <div class="col-6 col-md-3">
-                        <div class="form-check mt-3">
+                    <div class="col-6 col-md-3 d-flex align-items-center">
+                        <div class="form-check">
                             <input class="form-check-input" id="acc_defaultAccount" type="checkbox"/>
-                            <label class="form-check-label">По умолчанию</label>
+                            <label class="form-check-label ms-2">По умолчанию</label>
                         </div>
                     </div>
 
@@ -136,20 +148,19 @@
                         <input class="form-control" id="acc_cardNumber4"/>
                     </div>
 
-                    <div class="col-6 col-md-3">
-                        <div class="form-check mt-3">
+                    <div class="col-6 col-md-3 d-flex align-items-center">
+                        <div class="form-check">
                             <input class="form-check-input" id="acc_savingsAccount" type="checkbox"/>
-                            <label class="form-check-label">Сберегательный</label>
+                            <label class="form-check-label ms-2">Сберегательный</label>
                         </div>
                     </div>
 
-                    <div class="col-6 col-md-3">
-                        <div class="form-check mt-3">
+                    <div class="col-6 col-md-3 d-flex align-items-center">
+                        <div class="form-check">
                             <input class="form-check-input" id="acc_archiveAccount" type="checkbox"/>
-                            <label class="form-check-label">Архивный</label>
+                            <label class="form-check-label ms-2">Архивный</label>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -165,7 +176,10 @@
     API: <code>/api/v1/accounts</code>
 </footer>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="accounts/accounts.js"></script>
+
+<!-- App JS (static path) -->
+<script defer src="/accounts/accounts.js"></script>
 </body>
 </html>

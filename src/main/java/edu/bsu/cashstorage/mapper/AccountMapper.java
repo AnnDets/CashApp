@@ -11,8 +11,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
+import org.mapstruct.Named;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.boot.context.properties.PropertyMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +27,7 @@ public interface AccountMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "user.id", source = "userId"),
-            @Mapping(target = "bank.id", source = "accountInputDTO.bankId"),
+            @Mapping(target = "bank", expression = "java(accountInputDTO.getBankId() != null ? new Bank().setId(accountInputDTO.getBankId()) : null)"),
             @Mapping(target = "currency.id", source = "accountInputDTO.currencyId")
     })
     Account toEntity(AccountInputDTO accountInputDTO, UUID userId);

@@ -1,10 +1,21 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://localhost:8080/api/v1/accounts';
-    const API_CURRENCIES = 'http://localhost:8080/api/v1/configuration/currencies';
-    const API_BANKS = 'http://localhost:8080/api/v1/configuration/banks';
+// accounts.js (без ?userId — берём user_id из localStorage)
+console.log('accounts.js loaded');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    let userId = urlParams.get('userId') || localStorage.getItem('user_id') || '';
+document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE = '/api/v1/accounts';
+    const API_CURRENCIES = '/api/v1/configuration/currencies';
+    const API_BANKS = '/api/v1/configuration/banks';
+
+    // userId только из localStorage
+    let userId = localStorage.getItem('user_id') || null;
+
+    if (!userId) {
+        console.warn('user_id not found in localStorage — redirect to auth');
+        window.location.href = '/auth';
+        return;
+    }
+
+    // Элементы
     const accountsList = document.getElementById('accountsList');
     const loadingEl = document.getElementById('loading');
     const alertContainer = document.getElementById('alertContainer');
@@ -15,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const typeFilter = document.getElementById('typeFilter');
     const createAccountBtn = document.getElementById('createAccountBtn');
 
+    // Modal
     const accountModalEl = document.getElementById('accountModal');
     const accountModal = new bootstrap.Modal(accountModalEl);
     const accountForm = document.getElementById('accountForm');
@@ -47,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearAlert() {
         alertContainer.innerHTML = '';
     }
-
     function setLoading(isLoading) {
         loadingEl.classList.toggle('d-none', !isLoading);
         refreshBtn.disabled = isLoading;
@@ -62,6 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = getToken();
         if (token) headers['Authorization'] = 'Bearer ' + token;
         return headers;
+    }
+
+    function escapeHtml(str) {
+        if (!str && str !== 0) return '';
+        return String(str)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
     }
 
     async function loadDictionaries() {
@@ -96,38 +117,28 @@ document.addEventListener('DOMContentLoaded', () => {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
-        const credit = acc.creditLimit ? Number(acc.creditLimit).toLocaleString('ru-RU', {minimumFractionDigits: 2}) : '—';
+        const credit = (acc.creditLimit !== undefined && acc.creditLimit !== null) ? Number(acc.creditLimit).toLocaleString('ru-RU', {minimumFractionDigits: 2}) : '—';
         const bankIcon = acc.bankIcon || '';
         return `
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card account-card h-100 shadow-sm">
-          <div class="card-body d-flex gap-3">
-            <div class="d-flex flex-column align-items-center justify-content-center">
-              <div class="account-icon mb-2">${bankIcon ? `<img src="${bankIcon}" alt="" style="max-width:100%;max-height:100%;">` : acc.type.charAt(0)}</div>
-              <small class="text-muted">${acc.type}</small>
-            </div>
-
-            <div class="flex-grow-1">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <div class="account-name">${escapeHtml(acc.name)}</div>
-                  <div class="text-muted small">${escapeHtml(acc.currency?.displayName || '')}</div>
-                </div>
-                <div class="text-end">
-                  <div class="account-balance">${symbol} ${balance}</div>
-                  <div class="text-muted small">Кредит: ${credit}</div>
-                </div>
-              </div>
-
-              <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-outline-secondary btn-sm btn-transactions" data-id="${acc.id}">Транзакции</button>
-                <button class="btn btn-outline-primary btn-sm btn-edit" data-id="${acc.id}">Открыть</button>
-                <button class="btn btn-outline-success btn-sm btn-update" data-id="${acc.id}">Редактировать</button>
-              </div>
-            </div>
+      <div class="card account-card">
+        <div class="card-body">
+          <div class="account-icon">${bankIcon ? `<img src="${bankIcon}" alt="">` : escapeHtml(acc.type?.charAt(0) || '')}</div>
+          <div class="flex-grow-1">
+            <div class="account-name">${escapeHtml(acc.name)}</div>
+            <div class="account-meta">${escapeHtml(acc.currency?.displayName || '')}</div>
           </div>
-
-          <div class="card-footer text-muted small">
+          <div class="text-end">
+            <div class="account-balance">${symbol} ${balance}</div>
+            <div class="text-muted small">Кредит: ${credit}</div>
+          </div>
+        </div>
+        <div class="card-footer d-flex gap-2">
+          <div class="btn-group">
+            <button class="btn btn-outline-secondary btn-sm btn-transactions" data-id="${acc.id}">Транзакции</button>
+            <button class="btn btn-outline-primary btn-sm btn-edit" data-id="${acc.id}">Открыть</button>
+            <button class="btn btn-outline-success btn-sm btn-update" data-id="${acc.id}">Редактировать</button>
+          </div>
+          <div class="ms-auto text-muted small align-self-center">
             ${acc.savingsAccount ? 'Сберегательный' : ''} ${acc.archiveAccount ? ' • Архивный' : ''}
           </div>
         </div>
@@ -135,32 +146,21 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     }
 
-    function escapeHtml(str) {
-        if (!str && str !== 0) return '';
-        return String(str)
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll('"', '&quot;')
-            .replaceAll("'", '&#039;');
-    }
-
     async function loadAccounts() {
         clearAlert();
         accountsList.innerHTML = '';
         emptyState.classList.add('d-none');
 
-        if (!userId) {
-            showAlert('Не указан userId. Войдите или передайте ?userId=... в URL.', 'warning');
-            return;
-        }
-
         setLoading(true);
         try {
             const res = await fetch(`${API_BASE}?userId=${encodeURIComponent(userId)}`, {headers: authHeaders()});
             if (!res.ok) {
-                if (res.status === 401) showAlert('Неавторизован. Пожалуйста, войдите снова.', 'warning');
-                else {
+                if (res.status === 401) {
+                    showAlert('Неавторизован. Пожалуйста, войдите снова.', 'warning');
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user_id');
+                    setTimeout(() => window.location.href = '/auth', 900);
+                } else {
                     const err = await res.text().catch(() => '');
                     showAlert(`Ошибка сервера: ${res.status} ${err}`, 'danger');
                 }
@@ -185,18 +185,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            accountsList.innerHTML = filtered.map(buildAccountCard).join('');
+            // Рендерим сетку: вставляем карточки в .accounts-grid
+            const html = filtered.map(buildAccountCard).join('');
+            accountsList.innerHTML = html;
 
+            // Навешиваем обработчики
             document.querySelectorAll('.btn-transactions').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.dataset.id;
-                    window.location.href = `transactions.html?accountId=${encodeURIComponent(id)}`;
+                    window.location.href = `/transactions?accountId=${encodeURIComponent(id)}`;
                 });
             });
             document.querySelectorAll('.btn-edit').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.dataset.id;
-                    window.location.href = `account.html?id=${encodeURIComponent(id)}`;
+                    window.location.href = `/account?id=${encodeURIComponent(id)}`;
                 });
             });
             document.querySelectorAll('.btn-update').forEach(btn => {
@@ -207,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } catch (err) {
+            console.error('loadAccounts error', err);
             showAlert('Сетевая ошибка. Проверьте API и CORS.', 'danger');
         } finally {
             setLoading(false);
@@ -231,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await loadDictionaries();
 
         try {
-            const res = await fetch(`http://localhost:8080/api/v1/accounts/${encodeURIComponent(accountId)}`, {headers: authHeaders()});
+            const res = await fetch(`/api/v1/accounts/${encodeURIComponent(accountId)}`, {headers: authHeaders()});
             if (!res.ok) {
                 showAlert('Не удалось загрузить данные счёта.', 'danger');
                 return;
@@ -240,9 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
             fields.name.value = acc.name || '';
             fields.type.value = acc.type || 'CASH';
             fields.currencyId.value = acc.currency?.id || '';
-            fields.bankId.value = acc.bank?.id || '';
-            fields.creditLimit.value = acc.creditLimit || '';
-            fields.currentBalance.value = acc.currentBalance || '';
+            fields.bankId.value = acc.bank?.id || null;
+            fields.creditLimit.value = acc.creditLimit || null;
+            fields.currentBalance.value = acc.currentBalance || null;
             fields.includeInTotalBalance.checked = !!acc.includeInTotalBalance;
             fields.defaultAccount.checked = !!acc.defaultAccount;
             fields.cardNumber1.value = acc.cardNumber1 || '';
@@ -254,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             accountModal.show();
         } catch (e) {
+            console.error('openEditModal error', e);
             showAlert('Сетевая ошибка при загрузке счёта.', 'danger');
         }
     }
@@ -271,8 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
             name: fields.name.value.trim(),
             type: fields.type.value,
             currencyId: fields.currencyId.value || null,
-            creditLimit: fields.creditLimit.value || '',
-            currentBalance: fields.currentBalance.value || '',
+            creditLimit: fields.creditLimit.value || null,
+            currentBalance: fields.currentBalance.value || null,
             includeInTotalBalance: fields.includeInTotalBalance.checked,
             defaultAccount: fields.defaultAccount.checked,
             bankId: fields.bankId.value || null,
@@ -287,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let res;
             if (fields.id) {
-                res = await fetch(`http://localhost:8080/api/v1/accounts/${encodeURIComponent(fields.id)}?userId=${encodeURIComponent(userId)}`, {
+                res = await fetch(`/api/v1/accounts/${encodeURIComponent(fields.id)}?userId=${encodeURIComponent(userId)}`, {
                     method: 'PATCH',
                     headers: authHeaders(),
                     body: JSON.stringify(payload)
@@ -305,10 +310,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 accountModal.hide();
                 loadAccounts();
             } else {
-                const msg = data.message || JSON.stringify(data) || `Ошибка ${res.status}`;
+                const msg = data?.message || JSON.stringify(data) || `Ошибка ${res.status}`;
                 accountFormAlert.innerHTML = `<div class="alert alert-danger">${msg}</div>`;
             }
         } catch (err) {
+            console.error('account save error', err);
             accountFormAlert.innerHTML = `<div class="alert alert-danger">Сетевая ошибка. Проверьте API и CORS.</div>`;
         } finally {
             accountSaveBtn.disabled = false;
@@ -322,13 +328,10 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user_id');
-        window.location.href = 'index.html';
+        window.location.href = '/auth';
     });
 
     (async function init() {
-        if (!userId) {
-            userId = localStorage.getItem('user_id') || '';
-        }
         await loadDictionaries();
         loadAccounts();
     })();

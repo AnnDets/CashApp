@@ -11,7 +11,7 @@ import java.util.UUID;
 public class AccountInputDTO {
     private String name;
     private AccountType type;
-    private UUID currencyId;
+    private String currencyId;
     private String creditLimit;
     private String currentBalance;
     private Boolean includeInTotalBalance;

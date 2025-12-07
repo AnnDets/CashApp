@@ -4,6 +4,8 @@ import edu.bsu.cashstorage.entity.Account;
 import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.repository.AccountRepository;
 import edu.bsu.cashstorage.repository.UserRepository;
+import edu.bsu.cashstorage.repository.config.BankRepository;
+import edu.bsu.cashstorage.repository.config.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,8 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final BankRepository bankRepository;
+    private final CurrencyRepository currencyRepository;
 
     @Transactional(readOnly = true)
     public List<Account> getAccountList(UUID userId) {
@@ -46,7 +50,7 @@ public class AccountService {
 
     @Transactional
     public Account createAccount(UUID userId, Account account) {
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return accountRepository.save(account);
