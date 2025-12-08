@@ -36,6 +36,8 @@ public class Operation {
     @Column(nullable = false)
     private String externalSystemOperationId;
 
+    private UUID userId;
+
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private OperationType operationType;

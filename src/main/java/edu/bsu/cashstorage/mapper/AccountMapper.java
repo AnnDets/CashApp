@@ -10,9 +10,11 @@ import edu.bsu.cashstorage.mapper.config.CurrencyMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.boot.context.properties.PropertyMapper;
 
@@ -22,6 +24,7 @@ import java.util.UUID;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         uses = {CurrencyMapper.class, BankMapper.class},
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface AccountMapper {
     @Mappings({
@@ -40,4 +43,8 @@ public interface AccountMapper {
     ListAccountDTO toListDTO(Account account);
 
     List<ListAccountDTO> toListDTO(List<Account> accounts);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    void patchAccount(Account updated, @MappingTarget Account fromDB);
 }

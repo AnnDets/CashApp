@@ -5,7 +5,9 @@ import edu.bsu.cashstorage.entity.Place;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -23,4 +25,9 @@ public interface PlaceMapper {
     Place toEntity(SimplePlaceDTO simplePlaceDTO, UUID userId);
 
     List<SimplePlaceDTO> toSimpleDTO(List<Place> places);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "description", source = "description", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void patchEntity(Place update, @MappingTarget Place fromDB);
 }
