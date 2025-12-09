@@ -23,7 +23,6 @@ import java.util.UUID;
 public interface PlaceMapper {
     SimplePlaceDTO toSimpleDTO(Place place);
 
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "author.id", source = "userId")
     Place toEntity(SimplePlaceDTO simplePlaceDTO, UUID userId);
 

@@ -17,5 +17,5 @@ public interface PlaceRepository extends ListCrudRepository<Place, UUID> {
     Boolean existsByAuthorIdAndDescription(UUID authorId, String description);
 
     List<Place> findByDescriptionContainingIgnoreCaseAndAuthor_Id(String description, UUID authorId);
-    List<Place> findByDescriptionContainingIgnoreCaseAndAuthor_IdNotIn(String description, UUID authorId);
+    List<Place> findByDescriptionContainingIgnoreCaseAndAuthor_IdNotIn(String description, List<UUID> author_id);
 }

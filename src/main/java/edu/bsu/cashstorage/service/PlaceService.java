@@ -19,9 +19,7 @@ public class PlaceService {
     private final PlaceMapper placeMapper;
 
     public List<Place> getPlaces(UUID userId) {
-        return Stream.concat(placeRepository.findByAuthorId(userId).stream(),
-                        placeRepository.findByAuthor_IdNotIn(List.of(userId)).stream())
-                .toList();
+        return placeRepository.findByAuthorId(userId);
     }
 
     public Place createPlace(Place place) {
@@ -31,7 +29,7 @@ public class PlaceService {
     public Place patchPlace(UUID placeId, Place update) {
         Place fromDB = placeRepository.findById(placeId)
                 .orElseThrow(() -> new EntityNotFoundException("Place not found"));
-
+        
         placeMapper.patchEntity(update, fromDB);
 
         return placeRepository.save(fromDB);
@@ -45,9 +43,7 @@ public class PlaceService {
     }
 
     public List<Place> searchPlaces(String search, UUID userId) {
-        return Stream.concat(placeRepository.findByDescriptionContainingIgnoreCaseAndAuthor_Id(search, userId).stream(),
-                        placeRepository.findByDescriptionContainingIgnoreCaseAndAuthor_IdNotIn(search, userId).stream())
-                .toList();
+        return placeRepository.findByDescriptionContainingIgnoreCaseAndAuthor_Id(search, userId);
     }
 
 }
