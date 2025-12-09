@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {UserMapper.class, CategoryMapper.class, PlaceMapper.class},
+        uses = {UserMapper.class, CategoryMapper.class, PlaceMapper.class, AccountMapper.class},
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
@@ -28,13 +28,9 @@ public interface OperationMapper {
     @Mapping(target = "isProcessed", ignore = true)
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "created", ignore = true)
-    @Mapping(target = "place", expression = "java(dto.getPlaceId() != null ? new Place().setId(dto.getPlaceId()) : null)")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "externalSystemOperationId", ignore = true)
-    @Mapping(target = "category", expression = "java(dto.getCategoryId() != null ? new Category().setId(dto.getCategoryId()) : null)")
-    @Mapping(target = "accountOutcome", expression = "java(dto.getAccountOutcomeId() != null ? new Account().setId(dto.getAccountOutcomeId()) : null)")
-    @Mapping(target = "accountIncome", expression = "java(dto.getAccountIncomeId() != null ? new Account().setId(dto.getAccountIncomeId()) : null)")
-    Operation toEntity(UUID userId, InputOperationDTO dto);
+    Operation toEntity(InputOperationDTO dto, UUID userId);
 
     @Mapping(target = "updated", ignore = true)
     @Mapping(target = "isProcessed", ignore = true)
@@ -43,8 +39,9 @@ public interface OperationMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "externalSystemOperationId", ignore = true)
-    @Mapping(target = "category", expression = "java(updated.getCategory() != null ? updated.getCategory() : null)")
-    @Mapping(target = "accountIncome", expression = "java(updated.getAccountIncome() != null ? updated.getAccountIncome() : null)")
-    @Mapping(target = "accountOutcome", expression = "java(updated.getAccountOutcome() != null ? updated.getAccountOutcome() : null)")
+    @Mapping(target = "category", source = "category", qualifiedByName = "categorySimpleSet")
+    @Mapping(target = "accountOutcome", source = "accountOutcome", qualifiedByName = "accountSimpleSet")
+    @Mapping(target = "accountIncome", source = "accountIncome", qualifiedByName = "accountSimpleSet")
+    @Mapping(target = "place", source = "place", qualifiedByName = "placeSimpleSet")
     void patchEntity(Operation updated, @MappingTarget Operation operation);
 }

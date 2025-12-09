@@ -1,9 +1,8 @@
 package edu.bsu.cashstorage.dto.category;
 
+import edu.bsu.cashstorage.dto.config.IdDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.util.UUID;
 
 @Data
 @Accessors(chain = true)
@@ -12,6 +11,6 @@ public class CategoryInputDTO {
     private Boolean forOutcome;
     private String name;
     private Boolean mandatoryOutcome;
-    private UUID iconId;
-    private UUID colorId;
+    private IdDTO icon;
+    private IdDTO color;
 }

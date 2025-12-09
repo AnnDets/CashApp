@@ -1,5 +1,6 @@
 package edu.bsu.cashstorage.mapper.config;
 
+import edu.bsu.cashstorage.dto.config.IdDTO;
 import edu.bsu.cashstorage.dto.config.bank.BankDTO;
 import edu.bsu.cashstorage.dto.config.bank.SimpleBankDTO;
 import edu.bsu.cashstorage.entity.config.Bank;
@@ -16,6 +17,11 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface BankMapper {
     BankDTO toDTO(Bank bank);
+
+    @Mapping(target = "icon", ignore = true)
+    @Mapping(target = "displayName", ignore = true)
+    @Mapping(target = "country", ignore = true)
+    Bank toEntity(IdDTO dto);
 
     Bank toEntity(BankDTO dto);
 

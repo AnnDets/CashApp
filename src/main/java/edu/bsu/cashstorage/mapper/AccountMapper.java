@@ -4,6 +4,7 @@ import edu.bsu.cashstorage.dto.account.AccountDTO;
 import edu.bsu.cashstorage.dto.account.AccountInputDTO;
 import edu.bsu.cashstorage.dto.account.ListAccountDTO;
 import edu.bsu.cashstorage.dto.account.SimpleAccountDTO;
+import edu.bsu.cashstorage.dto.config.IdDTO;
 import edu.bsu.cashstorage.entity.Account;
 import edu.bsu.cashstorage.mapper.config.BankMapper;
 import edu.bsu.cashstorage.mapper.config.CurrencyMapper;
@@ -27,12 +28,8 @@ import java.util.UUID;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface AccountMapper {
-    @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "user.id", source = "userId"),
-            @Mapping(target = "bank", expression = "java(accountInputDTO.getBankId() != null ? new Bank().setId(accountInputDTO.getBankId()) : null)"),
-            @Mapping(target = "currency.id", source = "accountInputDTO.currencyId")
-    })
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user.id", source = "userId")
     Account toEntity(AccountInputDTO accountInputDTO, UUID userId);
 
     AccountDTO toDTO(Account account);
@@ -47,4 +44,24 @@ public interface AccountMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     void patchAccount(Account updated, @MappingTarget Account fromDB);
+
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "type", ignore = true)
+    @Mapping(target = "savingsAccount", ignore = true)
+    @Mapping(target = "name", ignore = true)
+    @Mapping(target = "includeInTotalBalance", ignore = true)
+    @Mapping(target = "defaultAccount", ignore = true)
+    @Mapping(target = "currentBalance", ignore = true)
+    @Mapping(target = "currency", ignore = true)
+    @Mapping(target = "creditLimit", ignore = true)
+    @Mapping(target = "cardNumber4", ignore = true)
+    @Mapping(target = "cardNumber3", ignore = true)
+    @Mapping(target = "cardNumber2", ignore = true)
+    @Mapping(target = "cardNumber1", ignore = true)
+    @Mapping(target = "bank", ignore = true)
+    @Mapping(target = "archiveAccount", ignore = true)
+    Account toEntity(IdDTO dto);
+
+    @Named("accountSimpleSet")
+    Account simpleSet(Account account);
 }
