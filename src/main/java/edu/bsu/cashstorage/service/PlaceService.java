@@ -24,11 +24,11 @@ public class PlaceService {
                 .toList();
     }
 
-    public Place createPlace(UUID userId, Place place) {
+    public Place createPlace(Place place) {
         return placeRepository.save(place);
     }
 
-    public Place patchPlace(UUID placeId, UUID userId, Place update) {
+    public Place patchPlace(UUID placeId, Place update) {
         Place fromDB = placeRepository.findById(placeId)
                 .orElseThrow(() -> new EntityNotFoundException("Place not found"));
 
@@ -44,8 +44,10 @@ public class PlaceService {
         placeRepository.deleteById(placeId);
     }
 
-    public List<Place> searchPlaces(String search) {
-        return placeRepository.findByDescriptionContainingIgnoreCase(search);
+    public List<Place> searchPlaces(String search, UUID userId) {
+        return Stream.concat(placeRepository.findByDescriptionContainingIgnoreCaseAndAuthor_Id(search, userId).stream(),
+                        placeRepository.findByDescriptionContainingIgnoreCaseAndAuthor_IdNotIn(search, userId).stream())
+                .toList();
     }
 
 }

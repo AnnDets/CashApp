@@ -2,6 +2,7 @@ package edu.bsu.cashstorage.service;
 
 import edu.bsu.cashstorage.entity.Account;
 import edu.bsu.cashstorage.entity.User;
+import edu.bsu.cashstorage.mapper.AccountMapper;
 import edu.bsu.cashstorage.repository.AccountRepository;
 import edu.bsu.cashstorage.repository.UserRepository;
 import edu.bsu.cashstorage.repository.config.BankRepository;
@@ -19,8 +20,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
-    private final BankRepository bankRepository;
-    private final CurrencyRepository currencyRepository;
+    private final AccountMapper mapper;
 
     @Transactional(readOnly = true)
     public List<Account> getAccountList(UUID userId) {
@@ -44,6 +44,8 @@ public class AccountService {
     public Account updateAccount(UUID accountId, Account newAccount) {
         Account accountFromDB = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        mapper.patchAccount(newAccount, accountFromDB);
 
         return accountRepository.save(accountFromDB);
     }

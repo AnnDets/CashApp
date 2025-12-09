@@ -2,6 +2,9 @@ package edu.bsu.cashstorage.controller;
 
 import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.dto.place.SimplePlaceDTO;
+import edu.bsu.cashstorage.mapper.PlaceMapper;
+import edu.bsu.cashstorage.service.PlaceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,34 +21,34 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(APIs.Server.API_V1_PLACES)
 public class PlaceController {
-    @GetMapping
-    public List<SimplePlaceDTO> getPlaces() {
-        return null;
-    }
+    private final PlaceService placeService;
+    private final PlaceMapper placeMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SimplePlaceDTO createPlace(@RequestParam(APIs.Params.USER_ID) UUID userId,
                                       @RequestBody SimplePlaceDTO simplePlaceDTO) {
-        return null;
+        return placeMapper.toSimpleDTO(placeService.createPlace(placeMapper.toEntity(simplePlaceDTO, userId)));
     }
 
     @PatchMapping(APIs.Server.ID_PATH)
     public SimplePlaceDTO patchPlace(@PathVariable(APIs.Params.ID) UUID placeId,
                                      @RequestParam(APIs.Params.USER_ID) UUID userId,
                                      @RequestBody SimplePlaceDTO simplePlaceDTO) {
-        return null;
+        return placeMapper.toSimpleDTO(placeService.patchPlace(placeId, placeMapper.toEntity(simplePlaceDTO, userId)));
     }
 
     @DeleteMapping(APIs.Server.ID_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removePlace(@PathVariable(APIs.Params.ID) UUID placeId) {
+        placeService.removePlace(placeId);
     }
 
     @GetMapping(APIs.Server.SEARCH_PATH)
-    public List<SimplePlaceDTO> getPlaces(@RequestParam String search) {
-        return null;
+    public List<SimplePlaceDTO> getPlaces(@RequestParam String search, @RequestParam(APIs.Params.USER_ID) UUID userId) {
+        return placeMapper.toSimpleDTO(placeService.searchPlaces(search, userId));
     }
 }

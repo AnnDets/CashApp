@@ -37,7 +37,7 @@ public class Account {
     @Column(nullable = false)
     private UUID id;
 
-    @ManyToOne(cascade = {})
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -48,7 +48,7 @@ public class Account {
     @Enumerated(value = EnumType.ORDINAL)
     private AccountType type;
 
-    @ManyToOne(cascade = {})
+    @ManyToOne()
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
@@ -62,7 +62,7 @@ public class Account {
     @Column(nullable = false)
     private Boolean defaultAccount;
 
-    @ManyToOne(cascade = {})
+    @ManyToOne()
     @JoinColumn(name = "bank_id")
     private Bank bank;
 
