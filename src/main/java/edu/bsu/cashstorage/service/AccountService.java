@@ -1,12 +1,13 @@
 package edu.bsu.cashstorage.service;
 
+import edu.bsu.cashstorage.dto.account.AccountDTO;
+import edu.bsu.cashstorage.dto.account.AccountInputDTO;
+import edu.bsu.cashstorage.dto.account.ListAccountDTO;
+import edu.bsu.cashstorage.dto.account.SimpleAccountDTO;
 import edu.bsu.cashstorage.entity.Account;
-import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.mapper.AccountMapper;
 import edu.bsu.cashstorage.repository.AccountRepository;
 import edu.bsu.cashstorage.repository.UserRepository;
-import edu.bsu.cashstorage.repository.config.BankRepository;
-import edu.bsu.cashstorage.repository.config.CurrencyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +24,14 @@ public class AccountService {
     private final AccountMapper mapper;
 
     @Transactional(readOnly = true)
-    public List<Account> getAccountList(UUID userId) {
-        return accountRepository.findByUserId(userId);
+    public List<ListAccountDTO> getAccountList(UUID userId) {
+        return mapper.toListDTO(accountRepository.findByUserId(userId));
     }
 
     @Transactional(readOnly = true)
-    public Account getAccount(UUID accountId) {
+    public AccountDTO getAccount(UUID accountId) {
         return accountRepository.findById(accountId)
+                .map(mapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
@@ -41,20 +43,20 @@ public class AccountService {
     }
 
     @Transactional
-    public Account updateAccount(UUID accountId, Account newAccount) {
-        Account accountFromDB = accountRepository.findById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
-
-        mapper.patchAccount(newAccount, accountFromDB);
-
-        return accountRepository.save(accountFromDB);
-    }
-
-    @Transactional
-    public Account createAccount(UUID userId, Account account) {
+    public SimpleAccountDTO createAccount(UUID userId, AccountInputDTO account) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return accountRepository.save(account);
+        Account entity = mapper.toEntity(account, userId);
+        return mapper.toSimpleDTO(accountRepository.save(entity));
+    }
+
+    public SimpleAccountDTO updateAccount(UUID userId, UUID accountId, AccountInputDTO accountInputDTO) {
+        Account accountFromDB = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        mapper.patchAccount(mapper.toEntity(accountInputDTO, userId), accountFromDB);
+
+        return mapper.toSimpleDTO(accountRepository.save(accountFromDB));
     }
 }

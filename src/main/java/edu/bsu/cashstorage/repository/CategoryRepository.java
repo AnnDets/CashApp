@@ -10,10 +10,4 @@ import java.util.UUID;
 @Repository
 public interface CategoryRepository extends ListCrudRepository<Category, UUID> {
     List<Category> findByAuthorId(UUID authorId);
-
-    List<Category> findByAuthorIdAndForIncomeTrue(UUID authorId);
-
-    List<Category> findByAuthorIdAndForOutcomeTrue(UUID authorId);
-
-    List<Category> findByAuthorIdAndMandatoryOutcomeTrue(UUID authorId);
 }

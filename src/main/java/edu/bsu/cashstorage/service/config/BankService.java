@@ -1,6 +1,7 @@
 package edu.bsu.cashstorage.service.config;
 
-import edu.bsu.cashstorage.entity.config.Bank;
+import edu.bsu.cashstorage.dto.config.bank.BankDTO;
+import edu.bsu.cashstorage.mapper.config.BankMapper;
 import edu.bsu.cashstorage.repository.config.BankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BankService {
     private final BankRepository bankRepository;
+    private final BankMapper bankMapper;
 
-    public List<Bank> getAllBanks() {
-        return bankRepository.findAll();
+    public List<BankDTO> getAllBanks() {
+        return bankMapper.toDTO(bankRepository.findAll());
     }
 
-    public List<Bank> searchBanks(@RequestParam String search) {
-        return bankRepository.findBankByDisplayNameContainingIgnoreCase(search);
+    public List<BankDTO> searchBanks(@RequestParam String search) {
+        return bankMapper.toDTO(bankRepository.findBankByDisplayNameContainingIgnoreCase(search));
     }
 }

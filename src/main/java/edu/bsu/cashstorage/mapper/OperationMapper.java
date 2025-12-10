@@ -2,6 +2,7 @@ package edu.bsu.cashstorage.mapper;
 
 import edu.bsu.cashstorage.dto.operation.InputOperationDTO;
 import edu.bsu.cashstorage.dto.operation.ListOperationDTO;
+import edu.bsu.cashstorage.dto.operation.SimpleOperationDTO;
 import edu.bsu.cashstorage.entity.Operation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -44,4 +45,6 @@ public interface OperationMapper {
     @Mapping(target = "accountIncome", source = "accountIncome", qualifiedByName = "accountSimpleSet")
     @Mapping(target = "place", source = "place", qualifiedByName = "placeSimpleSet")
     void patchEntity(Operation updated, @MappingTarget Operation operation);
+
+    SimpleOperationDTO toSimpleDTO(Operation entity);
 }

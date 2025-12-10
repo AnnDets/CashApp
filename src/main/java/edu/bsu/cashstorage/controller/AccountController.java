@@ -5,7 +5,6 @@ import edu.bsu.cashstorage.dto.account.AccountDTO;
 import edu.bsu.cashstorage.dto.account.AccountInputDTO;
 import edu.bsu.cashstorage.dto.account.ListAccountDTO;
 import edu.bsu.cashstorage.dto.account.SimpleAccountDTO;
-import edu.bsu.cashstorage.mapper.AccountMapper;
 import edu.bsu.cashstorage.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,16 +27,15 @@ import java.util.UUID;
 @RequestMapping(APIs.Server.API_V1_ACCOUNTS)
 public class AccountController {
     private final AccountService accountService;
-    private final AccountMapper accountMapper;
 
     @GetMapping
     public List<ListAccountDTO> getAccountList(@RequestParam(APIs.Params.USER_ID) UUID userId) {
-        return accountMapper.toListDTO(accountService.getAccountList(userId));
+        return accountService.getAccountList(userId);
     }
 
     @GetMapping(APIs.Server.ID_PATH)
     public AccountDTO getAccount(@PathVariable(APIs.Params.ID) UUID accountId) {
-        return accountMapper.toDTO(accountService.getAccount(accountId));
+        return accountService.getAccount(accountId);
     }
 
     @DeleteMapping(APIs.Server.ID_PATH)
@@ -50,13 +48,13 @@ public class AccountController {
     public SimpleAccountDTO updateAccount(@PathVariable(APIs.Params.ID) UUID accountId,
                                           @RequestParam(APIs.Params.USER_ID) UUID userId,
                                           @RequestBody AccountInputDTO accountInputDTO) {
-        return accountMapper.toSimpleDTO(accountService.updateAccount(accountId, accountMapper.toEntity(accountInputDTO, userId)));
+        return accountService.updateAccount(userId, accountId, accountInputDTO);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SimpleAccountDTO createAccount(@RequestParam(APIs.Params.USER_ID) UUID userId,
                                           @RequestBody AccountInputDTO accountInputDTO) {
-        return accountMapper.toSimpleDTO(accountService.createAccount(userId, accountMapper.toEntity(accountInputDTO, userId)));
+        return accountService.createAccount(userId, accountInputDTO);
     }
 }

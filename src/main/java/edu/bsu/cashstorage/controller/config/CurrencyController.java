@@ -2,7 +2,6 @@ package edu.bsu.cashstorage.controller.config;
 
 import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.dto.config.CurrencyDTO;
-import edu.bsu.cashstorage.mapper.config.CurrencyMapper;
 import edu.bsu.cashstorage.service.config.CurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +16,14 @@ import java.util.List;
 @RequestMapping(APIs.Server.API_V1_CURRENCIES)
 public class CurrencyController {
     private final CurrencyService currencyService;
-    private final CurrencyMapper currencyMapper;
 
     @GetMapping
     public List<CurrencyDTO> getCurrencies() {
-        return currencyMapper.toDto(currencyService.getCurrencies());
+        return currencyService.getCurrencies();
     }
 
     @GetMapping(APIs.Server.SEARCH_PATH)
     public List<CurrencyDTO> searchCurrencies(@RequestParam String search) {
-        return currencyMapper.toDto(currencyService.searchCurrencies(search));
+        return currencyService.searchCurrencies(search);
     }
 }

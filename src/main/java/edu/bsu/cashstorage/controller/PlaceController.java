@@ -31,14 +31,14 @@ public class PlaceController {
     @ResponseStatus(HttpStatus.CREATED)
     public SimplePlaceDTO createPlace(@RequestParam(APIs.Params.USER_ID) UUID userId,
                                       @RequestBody SimplePlaceDTO simplePlaceDTO) {
-        return placeMapper.toSimpleDTO(placeService.createPlace(placeMapper.toEntity(simplePlaceDTO, userId)));
+        return placeService.createPlace(userId, simplePlaceDTO);
     }
 
     @PatchMapping(APIs.Server.ID_PATH)
     public SimplePlaceDTO patchPlace(@PathVariable(APIs.Params.ID) UUID placeId,
                                      @RequestParam(APIs.Params.USER_ID) UUID userId,
                                      @RequestBody SimplePlaceDTO simplePlaceDTO) {
-        return placeMapper.toSimpleDTO(placeService.patchPlace(placeId, placeMapper.toEntity(simplePlaceDTO, userId)));
+        return placeService.patchPlace(userId, placeId, simplePlaceDTO);
     }
 
     @DeleteMapping(APIs.Server.ID_PATH)
@@ -49,6 +49,6 @@ public class PlaceController {
 
     @GetMapping(APIs.Server.SEARCH_PATH)
     public List<SimplePlaceDTO> getPlaces(@RequestParam String search, @RequestParam(APIs.Params.USER_ID) UUID userId) {
-        return placeMapper.toSimpleDTO(placeService.searchPlaces(search, userId));
+        return placeService.searchPlaces(search, userId);
     }
 }

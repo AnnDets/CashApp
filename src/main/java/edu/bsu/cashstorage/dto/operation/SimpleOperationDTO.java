@@ -14,7 +14,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class SimpleOperationDTO {
     private UUID id;
-    private SimpleCategoryDTO categoryId;
+    private SimpleCategoryDTO category;
     private SimpleAccountDTO accountOutcome;
     private SimpleAccountDTO accountIncome;
     private ZonedDateTime operationDate;
