@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 
 @Data
 @Accessors(chain = true)
-class DateRangeDTO {
+public class DateRangeFilter {
     private ZonedDateTime from;
     private ZonedDateTime to;
 }

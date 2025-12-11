@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @Accessors(chain = true)
-class CategoryFilter {
+public class CategoryFilter {
     private List<UUID> categoryIds;
     private Boolean include;
 }

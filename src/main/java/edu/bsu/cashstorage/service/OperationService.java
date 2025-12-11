@@ -5,6 +5,7 @@ import edu.bsu.cashstorage.dto.operation.ListOperationDTO;
 import edu.bsu.cashstorage.dto.operation.SimpleOperationDTO;
 import edu.bsu.cashstorage.dto.operation.filter.OperationFilterDTO;
 import edu.bsu.cashstorage.entity.Operation;
+import edu.bsu.cashstorage.filter.SpecificationService;
 import edu.bsu.cashstorage.mapper.OperationMapper;
 import edu.bsu.cashstorage.repository.OperationRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,12 +21,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OperationService {
     private final OperationRepository operationRepository;
+    private final SpecificationService specificationService;
     private final OperationMapper operationMapper;
 
     @Transactional(readOnly = true)
     public List<ListOperationDTO> filterOperations(UUID userId, OperationFilterDTO filter) {
-        Specification<Operation> spec = createSpecification(userId, filter);
-
+        Specification<Operation> spec = specificationService.createSpecification(userId, filter);
         List<Operation> operations = operationRepository.findAll(spec);
         return operationMapper.toListDTO(operations);
     }
@@ -57,46 +58,5 @@ public class OperationService {
 
         operation = operationRepository.save(operation);
         return operationMapper.toSimpleDTO(operation);
-    }
-
-    // Вспомогательный метод для создания спецификации фильтрации
-    private Specification<Operation> createSpecification(UUID userId, OperationFilterDTO filter) {
-        /*Specification<Operation> spec = (root, query, cb) ->
-                cb.equal(root.get("user").get("id"), userId);
-
-        if (filter.getCategoryId() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("category").get("id"), filter.getCategoryId()));
-        }
-
-        if (filter.getType() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("type"), filter.getType()));
-        }
-
-        if (filter.getFromDate() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.greaterThanOrEqualTo(root.get("date"), filter.getFromDate()));
-        }
-
-        if (filter.getToDate() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.lessThanOrEqualTo(root.get("date"), filter.getToDate()));
-        }
-
-        if (filter.getMinAmount() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.greaterThanOrEqualTo(root.get("amount"), filter.getMinAmount()));
-        }
-
-        if (filter.getMaxAmount() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.lessThanOrEqualTo(root.get("amount"), filter.getMaxAmount()));
-        }
-
-        return spec;
-        */
-
-        return null;
     }
 }

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 public class OperationFilterDTO {
-    private DateRangeDTO dateRange;
+    private DateRangeFilter dateRange;
     private List<UUID> accountIds;
     private CategoryFilter categoryFilter;
     private Boolean notProcessed;
