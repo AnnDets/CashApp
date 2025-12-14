@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {UserMapper.class, CategoryMapper.class, PlaceMapper.class, AccountMapper.class},
+        uses = {UserMapper.class, CategoryMapper.class, PlaceMapper.class, AccountMapper.class, CommonMapper.class},
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface OperationMapper {
+    @Mapping(target = "income", source = "income", qualifiedByName = "fromBigDecimal")
+    @Mapping(target = "outcome", source = "outcome", qualifiedByName = "fromBigDecimal")
     ListOperationDTO toListDTO(Operation operation);
 
     List<ListOperationDTO> toListDTO(List<Operation> operations);
@@ -30,7 +32,9 @@ public interface OperationMapper {
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "created", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "externalSystemOperationId", ignore = true)
+    @Mapping(target = "externalSystemOperationId", constant = "not-implemented")
+    @Mapping(target = "income", source = "dto.income", qualifiedByName = "toBigDecimal")
+    @Mapping(target = "outcome", source = "dto.outcome", qualifiedByName = "toBigDecimal")
     Operation toEntity(InputOperationDTO dto, UUID userId);
 
     @Mapping(target = "updated", ignore = true)

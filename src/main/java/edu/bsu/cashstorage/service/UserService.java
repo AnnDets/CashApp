@@ -29,7 +29,7 @@ public class UserService {
     public UserDTO updateProfile(UUID userId, PatchUserDTO patchUserDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        
+
         userMapper.patchEntity(userMapper.toEntity(patchUserDTO), user);
 
         User updatedUser = userRepository.save(user);

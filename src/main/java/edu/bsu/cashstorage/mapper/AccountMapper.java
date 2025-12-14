@@ -21,26 +21,34 @@ import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = {CurrencyMapper.class, BankMapper.class},
+        uses = {CurrencyMapper.class, BankMapper.class, CommonMapper.class},
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface AccountMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user.id", source = "userId")
+    @Mapping(target = "creditLimit", source = "accountInputDTO.creditLimit", qualifiedByName = "toBigDecimal")
+    @Mapping(target = "currentBalance", source = "accountInputDTO.currentBalance", qualifiedByName = "toBigDecimal")
     Account toEntity(AccountInputDTO accountInputDTO, UUID userId);
 
+    @Mapping(target = "creditLimit", source = "creditLimit", qualifiedByName = "fromBigDecimal")
+    @Mapping(target = "currentBalance", source = "currentBalance", qualifiedByName = "fromBigDecimal")
     AccountDTO toDTO(Account account);
 
     SimpleAccountDTO toSimpleDTO(Account account);
 
     @Mapping(target = "bankIcon", source = "bank.icon")
+    @Mapping(target = "creditLimit", source = "creditLimit", qualifiedByName = "fromBigDecimal")
+    @Mapping(target = "currentBalance", source = "currentBalance", qualifiedByName = "fromBigDecimal")
     ListAccountDTO toListDTO(Account account);
 
     List<ListAccountDTO> toListDTO(List<Account> accounts);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "creditLimit", source = "creditLimit", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(target = "bank", source = "bank", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     void patchAccount(Account updated, @MappingTarget Account fromDB);
 
     @Mapping(target = "user", ignore = true)

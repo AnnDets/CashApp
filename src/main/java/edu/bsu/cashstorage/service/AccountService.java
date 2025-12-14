@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -48,15 +49,31 @@ public class AccountService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Account entity = mapper.toEntity(account, userId);
+
+        if (Objects.nonNull(entity.getDefaultAccount()) && entity.getDefaultAccount()) {
+            removeDefaultMark(userId);
+        }
         return mapper.toSimpleDTO(accountRepository.save(entity));
     }
 
+    @Transactional
     public SimpleAccountDTO updateAccount(UUID userId, UUID accountId, AccountInputDTO accountInputDTO) {
-        Account accountFromDB = accountRepository.findById(accountId)
+        Account accountToUpdate = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        mapper.patchAccount(mapper.toEntity(accountInputDTO, userId), accountFromDB);
+        mapper.patchAccount(mapper.toEntity(accountInputDTO, userId), accountToUpdate);
 
-        return mapper.toSimpleDTO(accountRepository.save(accountFromDB));
+        if (Objects.nonNull(accountToUpdate.getDefaultAccount()) && accountToUpdate.getDefaultAccount()) {
+            removeDefaultMark(userId);
+        }
+        return mapper.toSimpleDTO(accountRepository.save(accountToUpdate));
+    }
+
+    protected void removeDefaultMark(UUID userId) {
+        accountRepository.setDefaultMark(userId);
+    }
+
+    boolean existsAccount(UUID accountId) {
+        return accountRepository.existsById(accountId);
     }
 }

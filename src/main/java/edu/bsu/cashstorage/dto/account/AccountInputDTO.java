@@ -1,5 +1,6 @@
 package edu.bsu.cashstorage.dto.account;
 
+import edu.bsu.cashstorage.dto.config.CurrencyDTO;
 import edu.bsu.cashstorage.dto.config.IdDTO;
 import edu.bsu.cashstorage.entity.enums.AccountType;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.experimental.Accessors;
 public class AccountInputDTO {
     private String name;
     private AccountType type;
-    private IdDTO currency;
+    private CurrencyDTO currency;
     private String creditLimit;
     private String currentBalance;
     private Boolean includeInTotalBalance;

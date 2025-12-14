@@ -58,6 +58,6 @@ public class OperationController {
     public SimpleOperationDTO updateOperation(@PathVariable(APIs.Params.ID) UUID operationId,
                                               @RequestParam(APIs.Params.USER_ID) UUID userId,
                                               @RequestBody InputOperationDTO inputOperationDTO) {
-        return operationService.updateOperation(operationId, userId, inputOperationDTO);
+        return operationService.updateOperation(userId, operationId, inputOperationDTO);
     }
 }

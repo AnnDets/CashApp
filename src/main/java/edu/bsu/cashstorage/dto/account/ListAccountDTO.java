@@ -5,7 +5,6 @@ import edu.bsu.cashstorage.entity.enums.AccountType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -15,8 +14,8 @@ public class ListAccountDTO {
     private String name;
     private AccountType type;
     private CurrencyDTO currency;
-    private BigDecimal creditLimit;
-    private BigDecimal currentBalance;
+    private String creditLimit;
+    private String currentBalance;
     private String bankIcon;
     private Boolean savingsAccount;
     private Boolean archiveAccount;

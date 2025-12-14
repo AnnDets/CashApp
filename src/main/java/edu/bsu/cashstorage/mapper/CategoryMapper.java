@@ -39,6 +39,8 @@ public interface CategoryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "author", ignore = true)
+    @Mapping(target = "icon", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+    @Mapping(target = "color", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     void patchEntity(Category updated, @MappingTarget Category fromDB);
 
     @Named("categorySimpleSet")
