@@ -14,4 +14,6 @@ public interface OperationRepository extends ListCrudRepository<Operation, UUID>
     List<Operation> findAll(Specification<Operation> spec);
 
     List<Operation> findByUserId(UUID userId);
+
+    void removeByAccountIncome_IdIsNullAndAccountOutcome_IdIsNullAndUserId(UUID userId);
 }

@@ -7,6 +7,7 @@ import edu.bsu.cashstorage.dto.account.SimpleAccountDTO;
 import edu.bsu.cashstorage.entity.Account;
 import edu.bsu.cashstorage.mapper.AccountMapper;
 import edu.bsu.cashstorage.repository.AccountRepository;
+import edu.bsu.cashstorage.repository.OperationRepository;
 import edu.bsu.cashstorage.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final OperationRepository operationRepository;
     private final AccountMapper mapper;
 
     @Transactional(readOnly = true)
@@ -40,7 +42,11 @@ public class AccountService {
     public void deleteAccount(UUID accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
+
         accountRepository.delete(account);
+
+        // remove Outcome Income operations and etc garbage
+        operationRepository.removeByAccountIncome_IdIsNullAndAccountOutcome_IdIsNullAndUserId(account.getUser().getId());
     }
 
     @Transactional
