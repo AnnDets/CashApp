@@ -23,6 +23,7 @@ public class APIs {
         // Auth endpoints
         public static final String AUTH_LOGIN = "/login";
         public static final String AUTH_REGISTER = "/register";
+        public static final String CHANGE_PASSWORD = "/change-password";
         // User endpoints
         public static final String USERS_PROFILE = "/profile";
 
