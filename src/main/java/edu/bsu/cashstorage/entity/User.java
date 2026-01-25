@@ -11,7 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -21,7 +26,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 @Accessors(chain = true)
-public class User {
+public class User implements UserDetails {
+    public static final String USER_AUTHORITY = "USER";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -35,4 +42,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(USER_AUTHORITY));
+    }
 }

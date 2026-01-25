@@ -1,4 +1,4 @@
-package edu.bsu.cashstorage.service;
+package edu.bsu.cashstorage.security.service;
 
 import edu.bsu.cashstorage.dto.user.PatchUserDTO;
 import edu.bsu.cashstorage.dto.user.UserDTO;
@@ -7,6 +7,9 @@ import edu.bsu.cashstorage.mapper.UserMapper;
 import edu.bsu.cashstorage.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -39,5 +42,10 @@ public class UserService {
     @Transactional
     public void deleteAccount(UUID userId) {
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findUserByUsername(username);
     }
 }
