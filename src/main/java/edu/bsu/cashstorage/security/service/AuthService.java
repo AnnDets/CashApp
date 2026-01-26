@@ -2,8 +2,8 @@ package edu.bsu.cashstorage.security.service;
 
 import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.repository.UserRepository;
-import edu.bsu.cashstorage.security.dto.ChangePasswordDTO;
 import edu.bsu.cashstorage.security.dto.AuthResponseDTO;
+import edu.bsu.cashstorage.security.dto.ChangePasswordDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -77,6 +77,7 @@ public class AuthService {
         String token = jwtService.generateToken(saved);
 
         return new AuthResponseDTO()
+                .setUserId(saved.getId())
                 .setAccessToken(token)
                 .setExpiresIn(tokenTtlInSeconds * 1000);
     }

@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class APIs {
 
-    public static final String API_V1 = Params.API + Params.SLASH + Params.V1;
+    public static final String API_V1 = Params.SLASH + Params.API + Params.SLASH + Params.V1;
 
     public static final class Server {
         // Config URLs

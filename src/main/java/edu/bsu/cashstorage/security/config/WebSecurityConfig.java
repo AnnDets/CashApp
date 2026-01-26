@@ -1,5 +1,6 @@
 package edu.bsu.cashstorage.security.config;
 
+import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.security.filter.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,30 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/webjars/**",
-                        "/resources/**",
-                        "/static/**",
-                        "/css/**",
-                        "/js/**",
-                        "/images/**",
-                        "/error"
-                );
-    }
 
     @Bean
-    AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
-
-        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-
-        return daoAuthenticationProvider;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
@@ -53,19 +34,24 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration ac) {
-        return ac.getAuthenticationManager();
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService) {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry ->
-                        registry.requestMatchers("/api/v1/auth/**").permitAll()
-                                .anyRequest().authenticated())
+                        registry.requestMatchers(
+                                        APIs.Server.API_V1_AUTH + APIs.Server.AUTH_LOGIN,
+                                        APIs.Server.API_V1_AUTH + APIs.Server.AUTH_REGISTER,
+
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
+                                .anyRequest().fullyAuthenticated())
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider(userDetailsService))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .anonymous(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
