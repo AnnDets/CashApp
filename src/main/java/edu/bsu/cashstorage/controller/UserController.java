@@ -3,7 +3,7 @@ package edu.bsu.cashstorage.controller;
 import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.dto.user.PatchUserDTO;
 import edu.bsu.cashstorage.dto.user.UserDTO;
-import edu.bsu.cashstorage.security.service.UserService;
+import edu.bsu.cashstorage.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

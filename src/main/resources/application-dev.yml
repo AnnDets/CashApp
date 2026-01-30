@@ -1,12 +1,11 @@
-cash-app:
-  security:
-    # noinspection SpringBootApplicationYaml
-    signing-key: ${SIGNING_KEY:ug83JEBeq59tJ5o7eW14Q2CeDIavem0z0lWl54RifDPmQWJxl0npXmsmqOJYMuRU}
-    token-ttl-in-seconds: ${TOKEN_TTL_IN_SEC:3600}
-
 spring:
   application:
     name: CashStorage
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:https://auth.storksoft.by/auth/realms/cash-app}
   datasource:
     url: jdbc:postgresql://localhost:${DB_PORT:5432}/cash_app
     username: postgres
