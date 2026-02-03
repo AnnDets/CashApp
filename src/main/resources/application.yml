@@ -7,8 +7,8 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_URL:https://auth.storksoft.by/auth/realms/cash-app}
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/cash_app
-    username: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cash_app}
+    username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
