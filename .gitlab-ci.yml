@@ -1,0 +1,25 @@
+stages:
+  - build
+  - test
+  - package
+
+build:
+  stage: build
+  image: maven:3.9.9-amazoncorretto-21 # Образ с Java 21
+  script:
+    - mvn clean compile
+
+test:
+  stage: test
+  image: maven:3.9.9-amazoncorretto-21
+  script:
+    - mvn test
+
+package:
+  stage: package
+  image: maven:3.9.9-amazoncorretto-21
+  script:
+    - mvn package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
