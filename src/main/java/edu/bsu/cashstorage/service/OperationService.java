@@ -104,8 +104,9 @@ public class OperationService {
     public SimpleOperationDTO createOperation(UUID userId, InputOperationDTO dto) {
         Operation entity = operationMapper.toEntity(dto, userId);
 
-        if (!operationValidator.validate(entity)) {
-            throw new IllegalArgumentException("Operation is not valid");
+        String validationError = operationValidator.validate(entity);
+        if (validationError != null) {
+            throw new IllegalArgumentException(validationError);
         }
         populateSystemFields(entity);
         calculateBalanceForInsert(entity);
@@ -130,8 +131,9 @@ public class OperationService {
 
         Operation updated = operationMapper.toEntity(dto, userId);
 
-        if (!operationValidator.validate(updated)) {
-            throw new IllegalArgumentException("Operation is not valid");
+        String validationError = operationValidator.validate(updated);
+        if (validationError != null) {
+            throw new IllegalArgumentException(validationError);
         }
         calculateBalanceForUpdate(toUpdate, updated);
 

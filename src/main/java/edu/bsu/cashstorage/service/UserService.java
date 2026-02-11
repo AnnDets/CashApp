@@ -39,11 +39,15 @@ public class UserService {
         log.info("Auto-provisioning user profile for Keycloak ID: {}", keycloakId);
         String email = SecurityUtils.getCurrentUserEmail();
         String username = SecurityUtils.getCurrentUsername();
+        String firstName = SecurityUtils.getFirstName();
+        String lastName = SecurityUtils.getLastName();
 
         User user = new User();
         user.setId(keycloakId);
         user.setEmail(email != null ? email : keycloakId.toString());
         user.setUsername(username != null ? username : (email != null ? email : keycloakId.toString()));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
 
         return userRepository.save(user);
     }

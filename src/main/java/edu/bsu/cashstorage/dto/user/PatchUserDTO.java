@@ -8,4 +8,7 @@ import lombok.experimental.Accessors;
 public class PatchUserDTO {
     private String username;
     private String email;
+    private String firstName;
+    private String lastName;
+    private String picture;
 }

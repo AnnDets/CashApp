@@ -33,4 +33,20 @@ public final class SecurityUtils {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return jwt.getClaimAsString("preferred_username");
     }
+
+    /**
+     * Extracts given_name (first name) from the current JWT token.
+     */
+    public static String getFirstName() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwt.getClaimAsString("given_name");
+    }
+
+    /**
+     * Extracts family_name (last name) from the current JWT token.
+     */
+    public static String getLastName() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return jwt.getClaimAsString("family_name");
+    }
 }
