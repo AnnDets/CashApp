@@ -38,6 +38,18 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+cashstorage:
+  keycloak:
+    admin:
+      server-url: ${KEYCLOAK_ADMIN_URL:https://auth.storksoft.by/auth}
+      realm: ${KEYCLOAK_ADMIN_REALM:master}
+      client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:admin-cli}
+      username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+      password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
+      target-realm: ${KEYCLOAK_TARGET_REALM:cash-app}
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
+
 logging:
   level:
     org.springframework.security: TRACE
