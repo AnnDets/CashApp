@@ -23,6 +23,9 @@ public interface UserMapper {
 
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "email", ignore = true)
+    @Mapping(target = "firstName", ignore = true)
+    @Mapping(target = "lastName", ignore = true)
+    @Mapping(target = "picture", ignore = true)
     User toEntity(IdDTO dto);
 
     @Named("userSimpleSet")
