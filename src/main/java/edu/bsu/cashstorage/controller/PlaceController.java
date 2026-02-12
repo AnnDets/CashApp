@@ -2,8 +2,10 @@ package edu.bsu.cashstorage.controller;
 
 import edu.bsu.cashstorage.api.APIs;
 import edu.bsu.cashstorage.dto.place.SimplePlaceDTO;
+import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.mapper.PlaceMapper;
 import edu.bsu.cashstorage.service.PlaceService;
+import edu.bsu.cashstorage.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,19 +28,20 @@ import java.util.UUID;
 public class PlaceController {
     private final PlaceService placeService;
     private final PlaceMapper placeMapper;
+    private final UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SimplePlaceDTO createPlace(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                      @RequestBody SimplePlaceDTO simplePlaceDTO) {
-        return placeService.createPlace(userId, simplePlaceDTO);
+    public SimplePlaceDTO createPlace(@RequestBody SimplePlaceDTO simplePlaceDTO) {
+        User user = userService.getCurrentUser();
+        return placeService.createPlace(user.getId(), simplePlaceDTO);
     }
 
     @PatchMapping(APIs.Server.ID_PATH)
     public SimplePlaceDTO patchPlace(@PathVariable(APIs.Params.ID) UUID placeId,
-                                     @RequestParam(APIs.Params.USER_ID) UUID userId,
                                      @RequestBody SimplePlaceDTO simplePlaceDTO) {
-        return placeService.patchPlace(userId, placeId, simplePlaceDTO);
+        User user = userService.getCurrentUser();
+        return placeService.patchPlace(user.getId(), placeId, simplePlaceDTO);
     }
 
     @DeleteMapping(APIs.Server.ID_PATH)
@@ -48,7 +51,8 @@ public class PlaceController {
     }
 
     @GetMapping(APIs.Server.SEARCH_PATH)
-    public List<SimplePlaceDTO> getPlaces(@RequestParam String search, @RequestParam(APIs.Params.USER_ID) UUID userId) {
-        return placeService.searchPlaces(search, userId);
+    public List<SimplePlaceDTO> getPlaces(@RequestParam String search) {
+        User user = userService.getCurrentUser();
+        return placeService.searchPlaces(search, user.getId());
     }
 }

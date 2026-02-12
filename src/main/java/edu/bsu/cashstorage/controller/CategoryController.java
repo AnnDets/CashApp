@@ -5,7 +5,9 @@ import edu.bsu.cashstorage.dto.category.CategoryDTO;
 import edu.bsu.cashstorage.dto.category.CategoryInputDTO;
 import edu.bsu.cashstorage.dto.category.ListCategoryDTO;
 import edu.bsu.cashstorage.dto.category.SimpleCategoryDTO;
+import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.service.CategoryService;
+import edu.bsu.cashstorage.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,10 +28,12 @@ import java.util.UUID;
 @RequestMapping(APIs.Server.API_V1_CATEGORIES)
 public class CategoryController {
     private final CategoryService categoryService;
+    private final UserService userService;
 
     @GetMapping
-    public List<ListCategoryDTO> getAllCategories(@RequestParam(APIs.Params.USER_ID) UUID userId) {
-        return categoryService.getAllCategories(userId);
+    public List<ListCategoryDTO> getAllCategories() {
+        User user = userService.getCurrentUser();
+        return categoryService.getAllCategories(user.getId());
     }
 
     @GetMapping(APIs.Server.ID_PATH)
@@ -46,15 +49,15 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SimpleCategoryDTO createCategory(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                            @RequestBody CategoryInputDTO categoryDTO) {
-        return categoryService.createCategory(userId, categoryDTO);
+    public SimpleCategoryDTO createCategory(@RequestBody CategoryInputDTO categoryDTO) {
+        User user = userService.getCurrentUser();
+        return categoryService.createCategory(user.getId(), categoryDTO);
     }
 
     @PatchMapping(APIs.Server.ID_PATH)
     public SimpleCategoryDTO patchCategory(@PathVariable(APIs.Params.ID) UUID categoryId,
-                                           @RequestParam(APIs.Params.USER_ID) UUID userId,
                                            @RequestBody CategoryInputDTO categoryDTO) {
-        return categoryService.patchCategory(userId, categoryId, categoryDTO);
+        User user = userService.getCurrentUser();
+        return categoryService.patchCategory(user.getId(), categoryId, categoryDTO);
     }
 }

@@ -14,4 +14,6 @@ public class ListCategoryDTO {
     private String name;
     private IconDTO icon;
     private ColorDTO color;
+    private Boolean forIncome;
+    private Boolean forOutcome;
 }

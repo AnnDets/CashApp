@@ -18,23 +18,16 @@ import org.mapstruct.ReportingPolicy;
 public interface UserMapper {
     UserDTO toDTO(User user);
 
-    @Mapping(target = "password", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
     User toEntity(PatchUserDTO patchUserDTO);
 
     @Mapping(target = "username", ignore = true)
-    @Mapping(target = "password", ignore = true)
     @Mapping(target = "email", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
     User toEntity(IdDTO dto);
 
     @Named("userSimpleSet")
-    @Mapping(target = "authorities", ignore = true)
     User simpleSet(User user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
     void patchEntity(User updated, @MappingTarget User fromDB);
 }

@@ -5,7 +5,9 @@ import edu.bsu.cashstorage.dto.operation.InputOperationDTO;
 import edu.bsu.cashstorage.dto.operation.ListOperationDTO;
 import edu.bsu.cashstorage.dto.operation.SimpleOperationDTO;
 import edu.bsu.cashstorage.dto.operation.filter.OperationFilterDTO;
+import edu.bsu.cashstorage.entity.User;
 import edu.bsu.cashstorage.service.OperationService;
+import edu.bsu.cashstorage.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,36 +29,38 @@ import java.util.UUID;
 public class OperationController {
 
     private final OperationService operationService;
+    private final UserService userService;
 
     @PostMapping(APIs.Server.FILTER_PATH)
-    public List<ListOperationDTO> filterOperations(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                                   @RequestBody OperationFilterDTO filter) {
-        return operationService.filterOperations(userId, filter);
+    public List<ListOperationDTO> filterOperations(@RequestBody OperationFilterDTO filter) {
+        User user = userService.getCurrentUser();
+        return operationService.filterOperations(user.getId(), filter);
     }
 
     @GetMapping
-    public List<ListOperationDTO> listOperations(@RequestParam(APIs.Params.USER_ID) UUID userId) {
-        return operationService.listOperations(userId);
+    public List<ListOperationDTO> listOperations() {
+        User user = userService.getCurrentUser();
+        return operationService.listOperations(user.getId());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SimpleOperationDTO createOperation(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                              @RequestBody InputOperationDTO inputOperationDTO) {
-        return operationService.createOperation(userId, inputOperationDTO);
+    public SimpleOperationDTO createOperation(@RequestBody InputOperationDTO inputOperationDTO) {
+        User user = userService.getCurrentUser();
+        return operationService.createOperation(user.getId(), inputOperationDTO);
     }
 
     @DeleteMapping(APIs.Server.ID_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOperation(@RequestParam(APIs.Params.USER_ID) UUID userId,
-                                @PathVariable(APIs.Params.ID) UUID operationId) {
-        operationService.deleteOperation(userId, operationId);
+    public void deleteOperation(@PathVariable(APIs.Params.ID) UUID operationId) {
+        User user = userService.getCurrentUser();
+        operationService.deleteOperation(user.getId(), operationId);
     }
 
     @PatchMapping(APIs.Server.ID_PATH)
     public SimpleOperationDTO updateOperation(@PathVariable(APIs.Params.ID) UUID operationId,
-                                              @RequestParam(APIs.Params.USER_ID) UUID userId,
                                               @RequestBody InputOperationDTO inputOperationDTO) {
-        return operationService.updateOperation(userId, operationId, inputOperationDTO);
+        User user = userService.getCurrentUser();
+        return operationService.updateOperation(user.getId(), operationId, inputOperationDTO);
     }
 }
