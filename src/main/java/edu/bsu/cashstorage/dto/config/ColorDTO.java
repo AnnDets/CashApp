@@ -3,12 +3,10 @@ package edu.bsu.cashstorage.dto.config;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.UUID;
-
 @Data
 @Accessors(chain = true)
 public class ColorDTO {
-    private UUID id;
+    private String name;
     private Short red;
     private Short green;
     private Short blue;

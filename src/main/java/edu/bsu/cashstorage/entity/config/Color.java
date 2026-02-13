@@ -2,8 +2,6 @@ package edu.bsu.cashstorage.entity.config;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -11,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,8 +19,7 @@ import java.util.UUID;
 @Accessors(chain = true)
 public class Color {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private String name;
     @Column(nullable = false)
     private Short red;
     @Column(nullable = false)

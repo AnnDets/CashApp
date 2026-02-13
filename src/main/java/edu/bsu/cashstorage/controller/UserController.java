@@ -5,6 +5,7 @@ import edu.bsu.cashstorage.dto.user.PatchUserDTO;
 import edu.bsu.cashstorage.dto.user.UserDTO;
 import edu.bsu.cashstorage.dto.user.UserRegistrationRequest;
 import edu.bsu.cashstorage.entity.User;
+import edu.bsu.cashstorage.mapper.UserMapper;
 import edu.bsu.cashstorage.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping(APIs.Server.AUTH_REGISTER)
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,7 +36,7 @@ public class UserController {
     @GetMapping(APIs.Server.USERS_PROFILE)
     public UserDTO getDetails() {
         User currentUser = userService.getCurrentUser();
-        return userService.getUserDetails(currentUser.getId());
+        return userMapper.toDTO(currentUser);
     }
 
     @PatchMapping(APIs.Server.USERS_PROFILE)

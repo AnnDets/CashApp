@@ -1,6 +1,7 @@
 package edu.bsu.cashstorage.dto.category;
 
 import edu.bsu.cashstorage.dto.config.IdDTO;
+import edu.bsu.cashstorage.dto.config.NameDTO;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,5 +13,5 @@ public class CategoryInputDTO {
     private String name;
     private Boolean mandatoryOutcome;
     private IdDTO icon;
-    private IdDTO color;
+    private NameDTO color;
 }

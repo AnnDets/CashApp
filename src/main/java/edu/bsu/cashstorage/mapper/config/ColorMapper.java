@@ -1,7 +1,7 @@
 package edu.bsu.cashstorage.mapper.config;
 
 import edu.bsu.cashstorage.dto.config.ColorDTO;
-import edu.bsu.cashstorage.dto.config.IdDTO;
+import edu.bsu.cashstorage.dto.config.NameDTO;
 import edu.bsu.cashstorage.entity.config.Color;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,7 +20,7 @@ public interface ColorMapper {
     @Mapping(target = "red", ignore = true)
     @Mapping(target = "green", ignore = true)
     @Mapping(target = "blue", ignore = true)
-    Color toEntity(IdDTO dto);
+    Color toEntity(NameDTO dto);
 
     Color toEntity(ColorDTO dto);
 
