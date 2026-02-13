@@ -27,7 +27,6 @@ import java.util.UUID;
 @RequestMapping(APIs.Server.API_V1_PLACES)
 public class PlaceController {
     private final PlaceService placeService;
-    private final PlaceMapper placeMapper;
     private final UserService userService;
 
     @PostMapping

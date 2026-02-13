@@ -23,7 +23,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<ListCategoryDTO> getAllCategories(UUID userId) {
-        return categoryMapper.toListDTO(categoryRepository.findByAuthorId(userId));
+        return categoryMapper.toListDTO(categoryRepository.findByUsedBy_Id(userId));
     }
 
     @Transactional(readOnly = true)

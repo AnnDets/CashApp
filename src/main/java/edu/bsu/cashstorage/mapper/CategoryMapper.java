@@ -31,14 +31,13 @@ public interface CategoryMapper {
 
     CategoryDTO toDTO(Category category);
 
+    @Mapping(target = "usedBy", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author.id", source = "userId")
     Category toEntity(CategoryInputDTO inputDTO, UUID userId);
 
     SimpleCategoryDTO toSimpleDTO(Category category);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author", ignore = true)
     @Mapping(target = "icon", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mapping(target = "color", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     void patchEntity(Category updated, @MappingTarget Category fromDB);
@@ -52,6 +51,6 @@ public interface CategoryMapper {
     @Mapping(target = "forOutcome", ignore = true)
     @Mapping(target = "forIncome", ignore = true)
     @Mapping(target = "color", ignore = true)
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "usedBy", ignore = true)
     Category toEntity(IdDTO dto);
 }

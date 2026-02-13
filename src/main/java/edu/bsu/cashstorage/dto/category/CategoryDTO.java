@@ -13,7 +13,6 @@ import java.util.UUID;
 public class CategoryDTO {
     private UUID id;
     private String name;
-    private UserDTO author;
     private Boolean forIncome;
     private Boolean forOutcome;
     private Boolean mandatoryOutcome;

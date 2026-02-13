@@ -18,9 +18,13 @@ import org.mapstruct.ReportingPolicy;
 public interface UserMapper {
     UserDTO toDTO(User user);
 
+    @Mapping(target = "places", ignore = true)
+    @Mapping(target = "categories", ignore = true)
     @Mapping(target = "id", ignore = true)
     User toEntity(PatchUserDTO patchUserDTO);
 
+    @Mapping(target = "places", ignore = true)
+    @Mapping(target = "categories", ignore = true)
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "firstName", ignore = true)

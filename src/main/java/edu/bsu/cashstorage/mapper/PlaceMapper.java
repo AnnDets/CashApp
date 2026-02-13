@@ -23,18 +23,18 @@ import java.util.UUID;
 public interface PlaceMapper {
     SimplePlaceDTO toSimpleDTO(Place place);
 
-    @Mapping(target = "author.id", source = "userId")
+    @Mapping(target = "usedBy", ignore = true)
     Place toEntity(SimplePlaceDTO simplePlaceDTO, UUID userId);
 
     List<SimplePlaceDTO> toSimpleDTO(List<Place> places);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "usedBy", ignore = true)
     @Mapping(target = "description", source = "description", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void patchEntity(Place update, @MappingTarget Place fromDB);
 
     @Mapping(target = "description", ignore = true)
-    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "usedBy", ignore = true)
     Place toEntity(IdDTO dto);
 
     @Named("placeSimpleSet")

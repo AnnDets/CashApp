@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface PlaceRepository extends ListCrudRepository<Place, UUID> {
-    List<Place> findByDescriptionContainingIgnoreCaseAndAuthor_Id(String description, UUID authorId);
+    List<Place> findByDescriptionContainingIgnoreCaseAndUsedBy_Id(String description, UUID authorId);
 }

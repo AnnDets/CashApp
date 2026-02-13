@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface CategoryRepository extends ListCrudRepository<Category, UUID> {
-    List<Category> findByAuthorId(UUID authorId);
+    List<Category> findByUsedBy_Id(UUID authorId);
 }

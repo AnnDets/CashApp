@@ -3,6 +3,9 @@ package edu.bsu.cashstorage.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -39,4 +43,20 @@ public class User {
 
     @Column(columnDefinition = "TEXT")
     private String picture;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_categories", // Название промежуточной таблицы
+            joinColumns = @JoinColumn(name = "user_id"), // Ключ этой сущности
+            inverseJoinColumns = @JoinColumn(name = "category_id") // Ключ связанной сущности
+    )
+    private Set<Category> categories;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_places", // Название промежуточной таблицы
+            joinColumns = @JoinColumn(name = "user_id"), // Ключ этой сущности
+            inverseJoinColumns = @JoinColumn(name = "place_id") // Ключ связанной сущности
+    )
+    private Set<Place> places;
 }

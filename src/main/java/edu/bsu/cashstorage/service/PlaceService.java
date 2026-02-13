@@ -26,7 +26,7 @@ public class PlaceService {
     }
 
     public List<SimplePlaceDTO> searchPlaces(String search, UUID userId) {
-        return placeMapper.toSimpleDTO(placeRepository.findByDescriptionContainingIgnoreCaseAndAuthor_Id(search, userId));
+        return placeMapper.toSimpleDTO(placeRepository.findByDescriptionContainingIgnoreCaseAndUsedBy_Id(search, userId));
     }
 
     public SimplePlaceDTO createPlace(UUID userId, SimplePlaceDTO simplePlaceDTO) {
